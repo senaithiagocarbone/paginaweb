@@ -1,198 +1,26 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora Completa</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-image: url('https://st.depositphotos.com/10614052/58357/i/1600/depositphotos_583573600-stock-photo-school-blackboard-prepared-maths-lesson.jpg');
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      background-color: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 20px;
-    }
-
-    .imagem-coluna {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .imagem-coluna img {
-      width: 70%;
-      max-width: 300px;
-      border-radius: 10px;
-    }
-
-    .calculadora {
-      background: #fff;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      width: 420px;
-    }
-
-    .display {
-      width: 100%;
-      padding: 15px;
-      font-size: 24px;
-      text-align: right;
-      border: none;
-      background: #f8f8f8;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    .botoes {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-    }
-
-    button {
-      padding: 15px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #007bff;
-      color: white;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    .operador { background: #f39c12; }
-    .controle { background: #e74c3c; }
-    .memoria, .taxa { background: #16a085; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaleco SENAI</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            width: 400px; /* Ajuste o tamanho conforme necessário */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="imagem-coluna">
-      <img src="https://imgv2-2-f.scribdassets.com/img/document/61281808/original/1d612768d5/1?v=1" alt="Imagem 1">
-      <img src="https://www.ensinandomatematica.com/wp-content/uploads/2017/01/calculadora_ensino.bmp" alt="Imagem 4">
-    </div>
 
-    <div class="calculadora">
-      <input type="text" id="display" class="display" readonly>
-      <div class="botoes">
-        <button class="controle" onclick="clearAll()">AC</button>
-        <button class="controle" onclick="clearEntry()">CE</button>
-        <button class="controle" onclick="clearLast()">C</button>
-        <button class="memoria" onclick="memoryAdd()">M+</button>
-        <button class="memoria" onclick="memorySubtract()">M-</button>
+    <h2>Jaleco SENAI</h2>
+    <img src="https://images.tcdn.com.br/img/img_prod/843883/jaleco_manga_curta_brim_senai_2445_1_7136b154ee3e43ccf533791ad557ce61.jpg" alt="Jaleco SENAI">
 
-        <button class="memoria" onclick="memoryRecall()">MR</button>
-        <button class="memoria" onclick="memoryUse()">MU</button>
-        <button class="memoria" onclick="memoryClear()">MRC</button>
-        <button class="taxa" onclick="taxPlus()">Tax+</button>
-        <button class="taxa" onclick="taxMinus()">Tax-</button>
-
-        <button onclick="addToDisplay('7')">7</button>
-        <button onclick="addToDisplay('8')">8</button>
-        <button onclick="addToDisplay('9')">9</button>
-        <button class="operador" onclick="addToDisplay('/')">÷</button>
-        <button class="operador" onclick="addToDisplay('%')">%</button>
-
-        <button onclick="addToDisplay('4')">4</button>
-        <button onclick="addToDisplay('5')">5</button>
-        <button onclick="addToDisplay('6')">6</button>
-        <button class="operador" onclick="addToDisplay('*')">×</button>
-        <button class="operador" onclick="calculate()">=</button>
-
-        <button onclick="addToDisplay('1')">1</button>
-        <button onclick="addToDisplay('2')">2</button>
-        <button onclick="addToDisplay('3')">3</button>
-        <button class="operador" onclick="addToDisplay('-')">−</button>
-        <button onclick="addToDisplay('.')">.</button>
-
-        <button onclick="addToDisplay('0')">0</button>
-        <button onclick="addToDisplay('+')">+</button>
-      </div>
-    </div>
-
-    <div class="imagem-coluna">
-      <img src="https://img.elo7.com.br/product/main/30EE67C/etiqueta-cartela-adesivo-numerados-1-a-50-redondo-branco-3cm-adesivos.jpg" alt="Imagem 2">
-      <img src="https://escolaweb.com.br/wp-content/uploads/2024/03/escolaweb-capas-artigos-5-maneiras-de-engajar-os-alunos-nas-atividades-escolares-1-1536x964.jpg" alt="Imagem 5">
-    </div>
-  </div>
-
-  <script>
-    let display = document.getElementById('display');
-    let memory = 0;
-    let taxRate = 0.1;
-
-    function addToDisplay(value) {
-      display.value += value;
-    }
-
-    function clearAll() {
-      display.value = '';
-    }
-
-    function clearEntry() {
-      display.value = '';
-    }
-
-    function clearLast() {
-      display.value = display.value.slice(0, -1);
-    }
-
-    function calculate() {
-      try {
-        display.value = eval(display.value);
-      } catch {
-        display.value = 'Erro';
-      }
-    }
-
-    function memoryAdd() {
-      memory += parseFloat(display.value) || 0;
-    }
-
-    function memorySubtract() {
-      memory -= parseFloat(display.value) || 0;
-    }
-
-    function memoryRecall() {
-      display.value = memory;
-    }
-
-    function memoryUse() {
-      display.value += memory;
-    }
-
-    function memoryClear() {
-      memory = 0;
-    }
-
-    function taxPlus() {
-      let val = parseFloat(display.value) || 0;
-      display.value = (val * (1 + taxRate)).toFixed(2);
-    }
-
-    function taxMinus() {
-      let val = parseFloat(display.value) || 0;
-      display.value = (val / (1 + taxRate)).toFixed(2);
-    }
-  </script>
 </body>
 </html>
 
