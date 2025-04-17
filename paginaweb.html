@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jornal Nacional - Notícia da Final da Libertadores 2017</title>
+  <style>
+    body {
+      background-image: url('https://www.maisfutebol.com.br/wp-content/uploads/2024/03/A-arena-do-gremio-1024x576.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    header {
+      background-color: #003366cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .news {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 10px;
+    }
+
+    .news h2 {
+      color: #003366;
+    }
+
+    .image-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .image-container img {
+      width: 32%;
+      height: auto;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+
+    .image-container img:hover {
+      transform: scale(1.05);
+    }
+
+    .top-images-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .top-images-row img.main {
+      width: 45%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-images-row img.main:hover {
+      transform: scale(1.03);
+    }
+
+    .video-section {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .video-section img {
+      width: 80%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .video-section img:hover {
+      transform: scale(1.02);
+    }
+
+    .video-section p {
+      font-weight: bold;
+      color: white;
+      margin-top: 10px;
+      background-color: #003366cc;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+
+    .video-section h2 {
+      color: white;
+    }
+
+    .flag-image {
+      position: fixed;
+      top: 50%;
+      left: -50px; /* MAIS PRA DIREITA */
+      transform: translateY(-50%);
+      width: 300px; /* Maior para destaque */
+      opacity: 0.95;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body onload="showWelcomeMessage()">
+
+  <!-- Bandeira do lado esquerdo -->
+  <img
+    class="flag-image"
+    src="https://http2.mlstatic.com/D_NQ_NP_774036-MLB72918886371_112023-O-kit-3-bandeiras-brasil-porto-alegre-e-rio-grande-do-sul.webp"
+    alt="Bandeiras Brasil, Porto Alegre e RS"
+  />
+
+  <header>
+    Jornal Nacional - Últimas notícias da final da Libertadores 2017
+  </header>
+
+  <div class="container">
+    <div class="news">
+      <h2>Final da Copa da Libertadores!</h2>
+      <p>Gols: Lanús (ARG) 1 x 2 Grêmio - Final Libertadores 2017.</p>
+    </div>
+
+    <div class="top-images-row">
+      <img class="main" src="https://i.ytimg.com/vi/bhgxsBziv6U/maxresdefault.jpg" alt="Imagem principal da final" />
+    </div>
+
+    <div class="image-container">
+      <img src="https://www.rbsdirect.com.br/imagesrc/23942387.jpg?w=700" alt="Imagem do clássico de futebol" />
+      <img src="https://i.superesportes.com.br/1iSxCAe_UhKLt40uoSjL9LkVyks=/smart/imgsapp.mg.superesportes.com.br/app/noticia_126420360808/2017/11/30/444522/20171130095409207110u.jpg" alt="Imagem 2" />
+      <img src="https://pm1.aminoapps.com/6663/ea1a6c86bce844675bc5c8339d61f5aa9e44724d_hq.jpg" alt="Imagem 3" />
+    </div>
+
+    <div class="news">
+      <h2>Grêmio é Tricampeão da Libertadores: 1983, 1995, 2017</h2>
+      <p>Até onde iremos para que der e vier, mas o certo é que nós estaremos com o Grêmio, onde o Grêmio estiver.</p>
+    </div>
+
+    <div class="video-section">
+      <h2>Assista aos Melhores Momentos da Final</h2>
+      <a href="https://www.espn.com.br/video/clipe/_/id/13385714" target="_blank">
+        <img src="https://i.ytimg.com/vi/bhgxsBziv6U/maxresdefault.jpg" alt="Capa do vídeo da ESPN" />
+        <p>▶ Clique aqui para assistir ao vídeo no site da ESPN</p>
+      </a>
+    </div>
+
+    <div class="video-section">
+      <h2>Assista também no YouTube</h2>
+      <a href="https://m.youtube.com/watch?v=-IVotgETjhY" target="_blank">
+        <img src="https://img.youtube.com/vi/-IVotgETjhY/maxresdefault.jpg" alt="Capa do vídeo no YouTube" />
+        <p>▶ Assista no YouTube: Grêmio 2x1 Lanús - Final 2017</p>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function showWelcomeMessage() {
+      alert("Bem-vindo! Confira tudo sobre a final histórica da Libertadores 2017.");
+    }
+  </script>
+</body>
+</html>
