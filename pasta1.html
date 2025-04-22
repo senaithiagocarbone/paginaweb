@@ -1,26 +1,195 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaleco SENAI</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        img {
-            width: 400px; /* Ajuste o tamanho conforme necessário */
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo da Velha de Salada de Fruta</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://static.vecteezy.com/ti/vetor-gratis/p1/15034423-fruit-a-grande-colecao-de-frutas-como-melancia-morango-kiwi-manga-maca-e-tambem-uvas-ameixa-limao-cereja-e-frutas-tropicais-um-grande-conjunto-com-frutas-vetor.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .fruit-image {
+      width: 150px;
+      height: auto;
+    }
+
+    .game-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #a8d5ba;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .game-wrapper h1 {
+      margin: 0;
+      font-size: 1.8em;
+      color: #2e7d32;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+      margin: 20px auto;
+    }
+
+    .cell {
+      background-color: #eee;
+      font-size: 2.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .cell:hover {
+      background-color: #ccc;
+    }
+
+    .info {
+      margin-top: 15px;
+      font-size: 1.2em;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #e67e22;
+      color: white;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d35400;
+    }
+  </style>
 </head>
 <body>
 
-    <h2>Jaleco SENAI</h2>
-    <img src="https://images.tcdn.com.br/img/img_prod/843883/jaleco_manga_curta_brim_senai_2445_1_7136b154ee3e43ccf533791ad557ce61.jpg" alt="Jaleco SENAI">
+  <div class="container">
+    <!-- Imagem da Uva à esquerda -->
+    <img class="fruit-image" src="https://www.shutterstock.com/image-photo/cluster-fresh-purple-grapes-against-260nw-2532362233.jpg" alt="Uva" />
 
+    <!-- Área do jogo -->
+    <div class="game-wrapper">
+      <!-- Frase com emojis -->
+      <h1>🍓🍉 Jogo da Velha de Salada de Fruta 🍍🍇</h1>
+
+      <div id="board" class="board"></div>
+
+      <div class="info">
+        <p id="status">Vez de: 🥭 Manga</p>
+        <button onclick="resetGame()">Reiniciar</button>
+      </div>
+    </div>
+
+    <!-- Imagem da Manga à direita -->
+    <img class="fruit-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Hapus_Mango.jpg/800px-Hapus_Mango.jpg" alt="Manga" />
+  </div>
+
+  <!-- Música de vitória -->
+  <audio id="victory-audio" src="https://assets.mixkit.co/music/preview/mixkit-video-game-win-2016.mp3" preload="auto"></audio>
+
+  <script>
+    const board = document.getElementById('board');
+    const statusText = document.getElementById('status');
+    const victoryAudio = document.getElementById('victory-audio');
+
+    let currentPlayer = 'Manga';
+    let gameActive = true;
+    let gameState = ["", "", "", "", "", "", "", "", ""];
+
+    const symbols = {
+      Manga: "🥭",
+      Uva: "🍇"
+    };
+
+    function createBoard() {
+      board.innerHTML = '';
+      gameState = ["", "", "", "", "", "", "", "", ""];
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.dataset.index = i;
+        cell.addEventListener('click', handleClick);
+        board.appendChild(cell);
+      }
+      statusText.textContent = `Vez de: ${symbols[currentPlayer]} ${currentPlayer}`;
+      gameActive = true;
+    }
+
+    function handleClick(e) {
+      const index = e.target.dataset.index;
+      if (gameState[index] !== "" || !gameActive) return;
+
+      gameState[index] = currentPlayer;
+      e.target.textContent = symbols[currentPlayer];
+
+      if (checkWinner()) {
+        statusText.textContent = `Jogador ${symbols[currentPlayer]} ${currentPlayer} venceu!`;
+        victoryAudio.play();
+        gameActive = false;
+        return;
+      }
+
+      if (!gameState.includes("")) {
+        statusText.textContent = "Empate!";
+        gameActive = false;
+        return;
+      }
+
+      currentPlayer = currentPlayer === 'Manga' ? 'Uva' : 'Manga';
+      statusText.textContent = `Vez de: ${symbols[currentPlayer]} ${currentPlayer}`;
+    }
+
+    function checkWinner() {
+      const wins = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+
+      return wins.some(combination => {
+        const [a, b, c] = combination;
+        return gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c];
+      });
+    }
+
+    function resetGame() {
+      currentPlayer = 'Manga';
+      createBoard();
+    }
+
+    createBoard();
+  </script>
 </body>
 </html>
 
