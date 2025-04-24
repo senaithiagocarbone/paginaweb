@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jogo da Velha de Salada de Fruta</title>
+  <title>Jogo da Velha - Salada de Frutas</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,40 +13,40 @@
       background-repeat: no-repeat;
       margin: 0;
       padding: 0;
-      height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     .container {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 30px;
-      margin-top: 20px;
     }
 
-    .fruit-image {
-      width: 150px;
-      height: auto;
+    .fruit-column {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 2em;
     }
 
     .game-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #a8d5ba;
+      background: #a9dfbf; /* verde esperança */
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
     }
 
-    .game-wrapper h1 {
-      margin: 0;
-      font-size: 1.8em;
-      color: #2e7d32;
+    h1 {
+      font-size: 1.5em;
+      color: green;
+      margin-bottom: 10px;
     }
 
     .board {
@@ -90,39 +90,54 @@
     button:hover {
       background-color: #d35400;
     }
+
+    .emoji-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      font-size: 2em;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px); opacity: 1; }
+      100% { transform: translateY(400px); opacity: 0; }
+    }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <!-- Imagem da Uva à esquerda -->
-    <img class="fruit-image" src="https://www.shutterstock.com/image-photo/cluster-fresh-purple-grapes-against-260nw-2532362233.jpg" alt="Uva" />
+    <!-- Coluna esquerda de mangas -->
+    <div class="fruit-column">
+      <span>🥭</span><span>🥭</span><span>🥭</span><span>🥭</span>
+      <span>🥭</span><span>🥭</span><span>🥭</span><span>🥭</span>
+    </div>
 
-    <!-- Área do jogo -->
+    <!-- Jogo da Velha -->
     <div class="game-wrapper">
-      <!-- Frase com emojis -->
-      <h1>🍓🍉 Jogo da Velha de Salada de Fruta 🍍🍇</h1>
-
+      <h1>Jogo da Velha de Salada de Frutas 🍇🥭</h1>
       <div id="board" class="board"></div>
-
       <div class="info">
         <p id="status">Vez de: 🥭 Manga</p>
         <button onclick="resetGame()">Reiniciar</button>
       </div>
+      <div id="effect-area"></div>
     </div>
 
-    <!-- Imagem da Manga à direita -->
-    <img class="fruit-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Hapus_Mango.jpg/800px-Hapus_Mango.jpg" alt="Manga" />
+    <!-- Coluna direita de uvas -->
+    <div class="fruit-column">
+      <span>🍇</span><span>🍇</span><span>🍇</span><span>🍇</span>
+      <span>🍇</span><span>🍇</span><span>🍇</span><span>🍇</span>
+    </div>
   </div>
-
-  <!-- Música de vitória -->
-  <audio id="victory-audio" src="https://assets.mixkit.co/music/preview/mixkit-video-game-win-2016.mp3" preload="auto"></audio>
 
   <script>
     const board = document.getElementById('board');
     const statusText = document.getElementById('status');
-    const victoryAudio = document.getElementById('victory-audio');
-
+    const effectArea = document.getElementById('effect-area');
     let currentPlayer = 'Manga';
     let gameActive = true;
     let gameState = ["", "", "", "", "", "", "", "", ""];
@@ -134,6 +149,7 @@
 
     function createBoard() {
       board.innerHTML = '';
+      effectArea.innerHTML = '';
       gameState = ["", "", "", "", "", "", "", "", ""];
       for (let i = 0; i < 9; i++) {
         const cell = document.createElement('div');
@@ -146,6 +162,16 @@
       gameActive = true;
     }
 
+    function showEffect(emojis) {
+      for (let i = 0; i < 20; i++) {
+        const elem = document.createElement('div');
+        elem.classList.add('emoji-effect');
+        elem.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        elem.style.left = Math.random() * 100 + '%';
+        effectArea.appendChild(elem);
+      }
+    }
+
     function handleClick(e) {
       const index = e.target.dataset.index;
       if (gameState[index] !== "" || !gameActive) return;
@@ -155,14 +181,15 @@
 
       if (checkWinner()) {
         statusText.textContent = `Jogador ${symbols[currentPlayer]} ${currentPlayer} venceu!`;
-        victoryAudio.play();
         gameActive = false;
+        showEffect(["🍎", "🍊", "🍌", "🥝", "🍓", "🍇", "🥭"]);
         return;
       }
 
       if (!gameState.includes("")) {
         statusText.textContent = "Empate!";
         gameActive = false;
+        showEffect(["🍉", "🍉", "🍉"]);
         return;
       }
 
@@ -177,8 +204,7 @@
         [0,4,8], [2,4,6]
       ];
 
-      return wins.some(combination => {
-        const [a, b, c] = combination;
+      return wins.some(([a, b, c]) => {
         return gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c];
       });
     }
