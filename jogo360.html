@@ -5,17 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jogo da Velha de Salada de Frutas</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #fefbd8;
-      background-image: url('https://static.vecteezy.com/ti/vetor-gratis/p1/15034423-fruit-a-grande-colecao-de-frutas-como-melancia-morango-kiwi-manga-maca-e-tambem-uvas-ameixa-limao-cereja-e-frutas-tropicais-um-grande-conjunto-com-frutas-vetor.jpg');
-      background-size: cover;
-      background-position: center;
       overflow-x: hidden;
     }
 
@@ -27,11 +22,38 @@
       flex-direction: column;
       text-align: center;
       padding: 20px;
+      position: relative;
+    }
+
+    .start-screen, .game-screen {
+      background-image: url('https://images.ecestaticos.com/YwOp7NeHg1Y6OxypbEJmMyV59Cw=/0x2:2047x1537/1200x899/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2F562%2F48a%2Ff95%2F56248af953496ab9d574b11861c4e790.jpg');
+      background-size: cover;
+      background-position: center;
     }
 
     .start-screen.active, .game-screen.active {
       display: flex;
     }
+
+    .top-rectangle {
+      width: 100%;
+      height: 60px;
+      background-color: rgba(46, 139, 87, 0.8);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .top-rectangle::before { content: "🍋🍓🫐😋"; margin-right: 15px; }
+    .top-rectangle::after { content: "🤤🍇😍🍓"; margin-left: 15px; }
 
     .title-box {
       background-color: rgba(255, 255, 255, 0.85);
@@ -39,7 +61,8 @@
       padding: 30px 40px;
       border-radius: 20px;
       box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      margin-bottom: 30px;
+      margin-top: 80px;
+      margin-bottom: 20px;
     }
 
     .title-box h1 {
@@ -49,10 +72,22 @@
       text-shadow: 1px 1px white;
     }
 
+    .phrase-box {
+      background-color: rgba(255, 255, 255, 0.85);
+      border: 2px solid #8e44ad;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1.2em;
+      color: #2e8b57;
+      font-weight: bold;
+      box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+      margin-bottom: 15px;
+    }
+
     .start-screen button {
       padding: 15px 30px;
       font-size: 1.2em;
-      background-color: #8e44ad; /* Cor roxa */
+      background-color: #8e44ad;
       color: white;
       border: none;
       border-radius: 12px;
@@ -62,22 +97,21 @@
       margin-top: 10px;
     }
 
-    /* Alterando o botão "2 Jogadores" para cor amarela */
-    .start-screen button:nth-child(2) {
-      background-color: #f1c40f; /* Cor amarela */
+    .start-screen button:last-of-type {
+      background-color: #f1c40f;
     }
 
-    .start-screen button:nth-child(2):hover {
-      background-color: #f39c12; /* Cor amarela mais escura ao passar o mouse */
+    .start-screen button:last-of-type:hover {
+      background-color: #f39c12;
     }
 
     .start-screen button:hover {
-      background-color: #9b59b6; /* Cor roxa mais clara ao passar o mouse */
+      background-color: #9b59b6;
     }
 
     .top-bar {
       position: fixed;
-      top: 0;
+      top: 60px;
       width: 100%;
       background-color: #2e8b57;
       color: #ffffff;
@@ -95,9 +129,9 @@
       justify-content: center;
       position: relative;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(255, 255, 255, 0.6);
       border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
 
     .fruit-column {
@@ -114,7 +148,7 @@
     }
 
     .game-wrapper {
-      background-color: #a9dfbf;
+      background-color: rgba(169, 223, 191, 0.6);
       padding: 30px;
       border-radius: 20px;
       display: flex;
@@ -168,13 +202,8 @@
       z-index: 0;
     }
 
-    .manga-img {
-      left: -130px;
-    }
-
-    .uva-img {
-      right: -130px;
-    }
+    .manga-img { left: -130px; }
+    .uva-img { right: -130px; }
 
     .emoji {
       position: absolute;
@@ -192,17 +221,19 @@
 </head>
 <body>
 
-  <!-- Tela inicial -->
+  <div class="top-rectangle">
+    Bem-vindo ao Jogo da Velha de Salada de Frutas!
+  </div>
+
   <div class="start-screen active" id="startScreen">
     <div class="title-box">
       <h1>🍇🥭🍉 Jogo da Velha de Salada de Frutas 🍉🥭🍇</h1>
     </div>
-    <p>Prepare-se para uma partida deliciosa!</p>
+    <div class="phrase-box">🍉 Prepare-se para uma partida deliciosa! 🍉</div>
     <button onclick="startGame()">🍇 Começar a se divertir 🍇</button>
     <button onclick="chooseFruit()">🥭 2 Jogadores 🥭</button>
   </div>
 
-  <!-- Tela do jogo -->
   <div class="game-screen" id="gameScreen">
     <div class="top-bar">
       👼👼 Jogo da Velha de Salada de Frutas 👼👼<br>
@@ -241,7 +272,7 @@
     let currentPlayer = 'Manga';
     let gameActive = true;
     let gameState = ["", "", "", "", "", "", "", "", ""];
-    let chosenFruit = '';  // A fruta escolhida para a chuva
+    let rainInterval;
 
     const symbols = {
       Manga: "🥭",
@@ -272,14 +303,16 @@
       if (checkWinner()) {
         statusText.textContent = `Jogador ${symbols[currentPlayer]} ${currentPlayer} venceu!`;
         gameActive = false;
-        rainEmojis([chosenFruit]);  // Usando a fruta escolhida para a chuva
+        playVictorySound();
+        rainEmojis([symbols[currentPlayer]]);
         return;
       }
 
       if (!gameState.includes("")) {
         statusText.textContent = "Empate!";
         gameActive = false;
-        rainEmojis(["🍉", "🍉", "🍉"]);
+        playDrawSound();
+        rainEmojis(["🍉"]);
         return;
       }
 
@@ -305,31 +338,26 @@
     }
 
     function startGame() {
+      stopStartScreenRain();
       document.getElementById('startScreen').classList.remove('active');
       document.getElementById('gameScreen').classList.add('active');
       createBoard();
-      rainEmojis([chosenFruit]);  // Chuva da fruta escolhida
     }
 
     function chooseFruit() {
+      stopStartScreenRain();
       const choice = prompt("Qual fruta você quer ser? Digite 'manga' ou 'uva'").toLowerCase();
-      
       if (choice === 'manga') {
         currentPlayer = 'Manga';
-        chosenFruit = "🥭";  // Definindo a fruta escolhida
       } else if (choice === 'uva') {
         currentPlayer = 'Uva';
-        chosenFruit = "🍇";  // Definindo a fruta escolhida
       } else {
         alert("Escolha inválida! Começando com 🥭 Manga por padrão.");
         currentPlayer = 'Manga';
-        chosenFruit = "🥭";  // Definindo a fruta padrão
       }
-
       document.getElementById('startScreen').classList.remove('active');
       document.getElementById('gameScreen').classList.add('active');
       createBoard();
-      rainEmojis([chosenFruit]);  // Chuva da fruta escolhida
     }
 
     function rainEmojis(emojis) {
@@ -343,6 +371,39 @@
         setTimeout(() => emoji.remove(), 3000);
       }
     }
+
+    function playVictorySound() {
+      const victorySound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+      victorySound.play();
+    }
+
+    function playDrawSound() {
+      const drawSound = new Audio('https://www.soundjay.com/button/beep-02.wav');
+      drawSound.play();
+    }
+
+    function rainStartScreenEmojis() {
+      const fruits = ["🍓", "🍍", "🍌", "🍉", "🍎", "🍇", "🥭", "🍒", "🍊", "🍏"];
+      rainInterval = setInterval(() => {
+        const emoji = document.createElement('div');
+        emoji.classList.add('emoji');
+        emoji.style.left = Math.random() * window.innerWidth + 'px';
+        emoji.style.top = '-50px';
+        emoji.textContent = fruits[Math.floor(Math.random() * fruits.length)];
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 4000);
+      }, 200);
+    }
+
+    function stopStartScreenRain() {
+      clearInterval(rainInterval);
+    }
+
+    rainStartScreenEmojis();
   </script>
 </body>
 </html>
+
+
+
+     
