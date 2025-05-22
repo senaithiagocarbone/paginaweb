@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sistema Gestão Loja de Roupas</title>
+<style>
+  /* Reset e estilo básico */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, #f8cdda, #1d2b64);
+    color: #333;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 15px;
+  }
+  h1, h2 {
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 5px #000;
+  }
+  button {
+    cursor: pointer;
+    background-color: #4caf50;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  input, select {
+    padding: 7px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    width: 100%;
+    font-size: 1rem;
+  }
+  label {
+    font-weight: 600;
+  }
+  .container {
+    background-color: rgba(255 255 255 / 0.9);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+  .hidden {
+    display: none;
+  }
+  /* Layout colunas */
+  .flex-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .flex-col {
+    flex: 1;
+    min-width: 280px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  th {
+    background-color: #4caf50;
+    color: white;
+  }
+  /* Notificações animadas */
+  #notification {
+    position: fixed;
+    top: 20px; right: 20px;
+    background-color: #4caf50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 9999;
+  }
+  #notification.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    .flex-row {
+      flex-direction: column;
+    }
+  }
+  /* Logo divertido */
+  #logo {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ffd700;
+    text-shadow: 2px 2px 5px #000;
+    margin-bottom: 15px;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="notification"></div>
+
+<div class="container" id="login-screen">
+  <div id="logo">👗 Loja Fashion 👚</div>
+  <h1>Login - Sistema Gestão Loja de Roupas</h1>
+  <form id="login-form">
+    <label for="username">Usuário</label>
+    <input type="text" id="username" required autocomplete="username" />
+    <label for="password">Senha</label>
+    <input type="password" id="password" required autocomplete="current-password" />
+    <button type="submit">Entrar</button>
+  </form>
+</div>
+
+<div class="container hidden" id="main-screen">
+  <h2>Cadastro de Vendas</h2>
+  <form id="sale-form">
+    <div class="flex-row">
+      <div class="flex-col">
+        <label for="clientName">Nome do Cliente</label>
+        <input type="text" id="clientName" placeholder="Ex: João Silva" required />
+      </div>
+      <div class="flex-col">
+        <label for="product">Produto</label>
+        <input type="text" id="product" placeholder="Ex: Camisa Polo" required />
+      </div>
+    </div>
+    <div class="flex-row">
+      <div class="flex-col">
+        <label for="quantity">Quantidade</label>
+        <input type="number" id="quantity" min="1" value="1" required />
+      </div>
+      <div class="flex-col">
+        <label for="price">Preço Unitário (R$)</label>
+        <input type="number" id="price" min="0.01" step="0.01" value="0.00" required />
+      </div>
+    </div>
+    <button type="submit">Registrar Venda</button>
+  </form>
+
+  <h2>Relatórios e Exportações</h2>
+  <div class="flex-row">
+    <div class="flex-col">
+      <button id="btnExportCSV">Exportar CSV</button>
+      <button id="btnExportPDF">Exportar PDF</button>
+      <button id="btnLogout">Logout</button>
+    </div>
+    <div class="flex-col">
+      <canvas id="salesChart" height="300"></canvas>
+    </div>
+  </div>
+
+  <h2>Lista de Vendas</h2>
+  <table id="salesTable" aria-label="Tabela de vendas">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço Unit.</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Vendas vão aqui -->
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  (() => {
+    // Sons simples para feedback
+    const sounds = {
+      success: new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg'),
+      error: new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg'),
+      export: new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg'),
+    };
+
+    const showNotification = (msg, type = 'success') => {
+      const notif = document.getElementById('notification');
+      notif.textContent = msg;
+      notif.style.backgroundColor = (type === 'error') ? '#e74c3c' : '#4caf50';
+      notif.classList.add('show');
+      setTimeout(() => {
+        notif.classList.remove('show');
+      }, 3000);
+    };
+
+    // Login
+    const loginForm = document.getElementById('login-form');
+    const loginScreen = document.getElementById('login-screen');
+    const mainScreen = document.getElementById('main-screen');
+
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      if (user === 'admin' && pass === '1234') {
+        loginScreen.classList.add('hidden');
+        mainScreen.classList.remove('hidden');
+        showNotification('Login realizado com sucesso!');
+      } else {
+        sounds.error.play();
+        showNotification('Erro: Usuário ou senha inválidos.', 'error');
+      }
+    });
+
+    // Dados e localStorage
+    const SALE_STORAGE_KEY = 'lojaRoupasVendas';
+
+    const loadSales = () => {
+      const data = localStorage.getItem(SALE_STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    };
+
+    const saveSales = (sales) => {
+      localStorage.setItem(SALE_STORAGE_KEY, JSON.stringify(sales));
+    };
+
+    // Atualizar tabela e gráfico
+    const salesTableBody = document.querySelector('#salesTable tbody');
+    const salesChartCtx = document.getElementById('salesChart').getContext('2d');
+    let salesChart;
+
+    const formatCurrency = val => 'R$ ' + val.toFixed(2).replace('.', ',');
+
+    function updateTableAndChart() {
+      const sales = loadSales();
+      salesTableBody.innerHTML = '';
+      sales.forEach(sale => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${sale.clientName}</td>
+          <td>${sale.product}</td>
+          <td>${sale.quantity}</td>
+          <td>${formatCurrency(sale.price)}</td>
+          <td>${formatCurrency(sale.quantity * sale.price)}</td>
+        `;
+        salesTableBody.appendChild(tr);
+      });
+
+      // Atualizar gráfico: total vendido por produto
+      const totalsByProduct = {};
+      sales.forEach(({product, quantity, price}) => {
+        if (!totalsByProduct[product]) totalsByProduct[product] = 0;
+        totalsByProduct[product] += quantity * price;
+      });
+
+      const labels = Object.keys(totalsByProduct);
+      const data = labels.map(prod => totalsByProduct[prod]);
+
+      if (salesChart) salesChart.destroy();
+
+      salesChart = new Chart(salesChartCtx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Total vendido (R$)',
+            data,
+            backgroundColor: 'rgba(76, 175, 80, 0.7)',
+            borderColor: 'rgba(76, 175, 80, 1)',
+            borderWidth: 1,
+            borderRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { mode: 'index', intersect: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { callback: val => 'R$ ' + val.toFixed(2).replace('.', ',') }
+            }
+          }
+        }
+      });
+    }
+
+    // Registrar venda
+    const saleForm = document.getElementById('sale-form');
+    saleForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const clientName = document.getElementById('clientName').value.trim();
+      const product = document.getElementById('product').value.trim();
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const price = parseFloat(document.getElementById('price').value);
+
+      if (!clientName) {
+        sounds.error.play();
+        showNotification('Erro: Preencha o nome do cliente.', 'error');
+        return;
+      }
+      if (!product) {
+        sounds.error.play();
+        showNotification('Erro: Preencha o produto.', 'error');
+        return;
+      }
+      if (quantity <= 0 || isNaN(quantity)) {
+        sounds.error.play();
+        showNotification('Erro: Quantidade inválida.', 'error');
+        return;
+      }
+      if (price <= 0 || isNaN(price)) {
+        sounds.error.play();
+        showNotification('Erro: Preço inválido.', 'error');
+        return;
+      }
+
+      const sales = loadSales();
+      sales.push({clientName, product, quantity, price});
+      saveSales(sales);
+      showNotification('Venda registrada com sucesso!');
+      sounds.success.play();
+      saleForm.reset();
+      updateTableAndChart();
+    });
+
+    // Export CSV
+    document.getElementById('btnExportCSV').addEventListener('click', () => {
+      const sales = loadSales();
+      if (sales.length === 0) {
+        sounds.error.play();
+        showNotification('Nenhuma venda para exportar.', 'error');
+        return;
+      }
+      let csv = 'Cliente,Produto,Quantidade,Preço Unitário,Total\n';
+      sales.forEach(sale => {
+        const total = (sale.quantity * sale.price).toFixed(2);
+        csv += `"${sale.clientName}","${sale.product}",${sale.quantity},${sale.price.toFixed(2)},${total}\n`;
+      });
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'vendas_loja_roupas.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showNotification('CSV exportado com sucesso!');
+      sounds.export.play();
+    });
+
+    // Export PDF (usando jsPDF)
+    document.getElementById('btnExportPDF').addEventListener('click', async () => {
+      const sales = loadSales();
+      if (sales.length === 0) {
+        sounds.error.play();
+        showNotification('Nenhuma venda para exportar.', 'error');
+        return;
+      }
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text('Relatório de Vendas - Loja Fashion', 14, 20);
+        doc.setFontSize(12);
+
+        let y = 30;
+        doc.text('Cliente', 14, y);
+        doc.text('Produto', 60, y);
+        doc.text('Qtd.', 110, y);
+        doc.text('Preço Unit.', 130, y);
+        doc.text('Total', 170, y);
+        y += 6;
+
+        sales.forEach(sale => {
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text(sale.clientName, 14, y);
+          doc.text(sale.product, 60, y);
+          doc.text(String(sale.quantity), 110, y);
+          doc.text('R$ ' + sale.price.toFixed(2).replace('.', ','), 130, y);
+          doc.text('R$ ' + (sale.quantity * sale.price).toFixed(2).replace('.', ','), 170, y);
+          y += 8;
+        });
+
+        doc.save('relatorio_vendas_loja_fashion.pdf');
+        showNotification('PDF exportado com sucesso!');
+        sounds.export.play();
+      } catch (err) {
+        showNotification('Erro ao exportar PDF.', 'error');
+        sounds.error.play();
+      }
+    });
+
+    // Logout
+    document.getElementById('btnLogout').addEventListener('click', () => {
+      mainScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+      showNotification('Logout realizado!');
+    });
+
+    // Inicialização
+    updateTableAndChart();
+  })();
+</script>
+
+</body>
+</html>
+
