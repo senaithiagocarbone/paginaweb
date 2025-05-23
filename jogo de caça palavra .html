@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🛙 Sistema de Gestão - Loja de Roupas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    input[readonly] {
+      background-color: #f0f0f0;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      filter: brightness(90%);
+    }
+    #loginBtn {
+      background-color: #4caf50;
+      color: white;
+    }
+    #logoutBtn {
+      background-color: #f44336;
+      color: white;
+      float: right;
+    }
+    #addSaleBtn, #exportBtn, #addCashBtn {
+      background-color: #2196f3;
+      color: white;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    th {
+      background-color: #2196f3;
+      color: white;
+    }
+    .success {
+      color: green;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .hidden {
+      display: none;
+    }
+    #animation {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 1.5rem;
+    }
+    #loginImage {
+      display: block;
+      margin: 0 auto 1rem auto;
+      max-width: 150px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    /* Estilo para o canvas do gráfico */
+    #salesChart {
+      max-width: 700px;
+      margin: 2rem auto 0 auto;
+    }
+    /* Caixa de dinheiro */
+    #cashContainer {
+      margin-top: 2rem;
+      border: 2px dashed #2196f3;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #e3f2fd;
+      position: relative;
+    }
+    #cashEmojis {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+    #cashBalance {
+      font-weight: bold;
+      font-size: 1.25rem;
+      margin-top: 0.5rem;
+      text-align: center;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login -->
+  <div class="container" id="loginScreen">
+    <img id="loginImage" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Roupas estilosas" />
+    <h1>🔐 Login - Loja de Roupas</h1>
+    <label for="username">👤 Usuário:</label>
+    <input type="text" id="username" />
+    <label for="password">🔑 Senha:</label>
+    <input type="password" id="password" />
+    <button id="loginBtn">Entrar</button>
+    <div id="loginError" class="error hidden">❌ Usuário ou senha incorretos!</div>
+  </div>
+
+  <!-- Sistema -->
+  <div class="container hidden" id="mainScreen">
+    <button id="logoutBtn">🚪 Logout</button>
+    <h1>📈 Gestão da Loja de Roupas</h1>
+
+    <h2>🛒 Registrar Venda</h2>
+
+    <h3>📋 Tabela de Preços</h3>
+    <table>
+      <thead>
+        <tr><th>Produto</th><th>Preço (R$)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Camiseta 👕</td><td>50,00</td></tr>
+        <tr><td>Calça 👖</td><td>90,00</td></tr>
+        <tr><td>Vestido 👗</td><td>120,00</td></tr>
+        <tr><td>Jaqueta 🧥</td><td>150,00</td></tr>
+        <tr><td>Sapato 👟</td><td>110,00</td></tr>
+      </tbody>
+    </table>
+
+    <label for="productSelect">👕 Produto:</label>
+    <select id="productSelect">
+      <option value="Camiseta">Camiseta 👕</option>
+      <option value="Calça">Calça 👖</option>
+      <option value="Vestido">Vestido 👗</option>
+      <option value="Jaqueta">Jaqueta 🧥</option>
+      <option value="Sapato">Sapato 👟</option>
+    </select>
+
+    <label for="clientName">🧑 Cliente:</label>
+    <input type="text" id="clientName" />
+
+    <label for="price">💰 Preço (R$):</label>
+    <input type="text" id="price" readonly />
+
+    <button id="addSaleBtn">💾 Registrar Venda</button>
+    <div id="saleMessage" class="success hidden"></div>
+
+    <!-- Caixa de dinheiro -->
+    <div id="cashContainer">
+      <div id="cashEmojis">💵💰🪙💸</div>
+      <h2>💵 Caixa de Dinheiro - Pagamento à Vista</h2>
+      <label for="cashAmount">💸 Valor a adicionar (R$):</label>
+      <input type="number" id="cashAmount" min="0" step="0.01" placeholder="Ex: 100.00" />
+      <button id="addCashBtn">➕ Adicionar ao Caixa</button>
+      <div id="cashBalance">Saldo atual: R$ 0,00</div>
+      <div id="cashMessage" class="success hidden"></div>
+    </div>
+
+    <h2>📈 Relatórios</h2>
+    <button id="exportBtn">📄 Exportar CSV</button>
+
+    <table>
+      <thead>
+        <tr><th>📦 Total de Vendas</th><th>💲 Valor Total Vendido</th></tr>
+      </thead>
+      <tbody>
+        <tr><td id="totalSales">0</td><td id="totalValue">0,00</td></tr>
+      </tbody>
+    </table>
+
+    <h3>🔥 Produtos Mais Vendidos</h3>
+    <table id="productsTable">
+      <thead><tr><th>Produto</th><th>Quantidade</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>🏆 Clientes que Mais Compraram</h3>
+    <table id="clientsTable">
+      <thead><tr><th>Cliente</th><th>Total (R$)</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="animation"></div>
+
+    <!-- Gráfico -->
+    <canvas id="salesChart" aria-label="Gráfico de vendas por produto" role="img"></canvas>
+  </div>
+
+  <!-- Áudios -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="errorSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    (() => {
+      // Dados fixos dos preços
+      const prices = {
+        "Camiseta": 50.00,
+        "Calça": 90.00,
+        "Vestido": 120.00,
+        "Jaqueta": 150.00,
+        "Sapato": 110.00
+      };
+
+      // Credenciais de login fixas
+      const USERNAME = 'admin';
+      const PASSWORD = '1234';
+
+      // Elementos
+      const loginScreen = document.getElementById('loginScreen');
+      const mainScreen = document.getElementById('mainScreen');
+      const loginBtn = document.getElementById('loginBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const loginError = document.getElementById('loginError');
+
+      const productSelect = document.getElementById('productSelect');
+      const clientNameInput = document.getElementById('clientName');
+      const priceInput = document.getElementById('price');
+      const addSaleBtn = document.getElementById('addSaleBtn');
+      const saleMessage = document.getElementById('saleMessage');
+
+      const totalSalesElem = document.getElementById('totalSales');
+      const totalValueElem = document.getElementById('totalValue');
+
+      const productsTableBody = document.querySelector('#productsTable tbody');
+      const clientsTableBody = document.querySelector('#clientsTable tbody');
+
+      const exportBtn = document.getElementById('exportBtn');
+
+      const animationDiv = document.getElementById('animation');
+
+      // Caixa dinheiro
+      const cashAmountInput = document.getElementById('cashAmount');
+      const addCashBtn = document.getElementById('addCashBtn');
+      const cashBalanceElem = document.getElementById('cashBalance');
+      const cashMessage = document.getElementById('cashMessage');
+
+      // Sons
+      const successSound = document.getElementById('successSound');
+      const errorSound = document.getElementById('errorSound');
+
+      // Chart.js
+      const ctx = document.getElementById('salesChart').getContext('2d');
+      let salesChart;
+
+      // Estado da aplicação
+      let sales = JSON.parse(localStorage.getItem('sales')) || [];
+      let cashBalance = parseFloat(localStorage.getItem('cashBalance')) || 0;
+
+      // Função para formatar dinheiro
+      function formatMoney(value) {
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+
+      // Atualiza o preço conforme produto selecionado
+      function updatePrice() {
+        const product = productSelect.value;
+        priceInput.value = formatMoney(prices[product]);
+      }
+
+      productSelect.addEventListener('change', updatePrice);
+
+      // Validação do login
+      function validateLogin() {
+        const user = usernameInput.value.trim();
+        const pass = passwordInput.value.trim();
+        if(user === USERNAME && pass === PASSWORD){
+          loginError.classList.add('hidden');
+          loginScreen.classList.add('hidden');
+          mainScreen.classList.remove('hidden');
+          resetLoginForm();
+          updateUI();
+          startAnimation();
+          return true;
+        } else {
+          loginError.classList.remove('hidden');
+          errorSound.play();
+          return false;
+        }
+      }
+
+      // Limpa inputs de login
+      function resetLoginForm() {
+        usernameInput.value = '';
+        passwordInput.value = '';
+      }
+
+      // Logout
+      function logout() {
+        mainScreen.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+        stopAnimation();
+      }
+
+      // Adiciona venda
+      function addSale() {
+        const product = productSelect.value;
+        const client = clientNameInput.value.trim();
+        if(client === ''){
+          saleMessage.textContent = '⚠️ Informe o nome do cliente.';
+          saleMessage.classList.remove('hidden');
+          saleMessage.classList.remove('success');
+          saleMessage.classList.add('error');
+          errorSound.play();
+          return;
+        }
+
+        const price = prices[product];
+        const newSale = { product, client, price, date: new Date().toISOString() };
+        sales.push(newSale);
+        localStorage.setItem('sales', JSON.stringify(sales));
+        saleMessage.textContent = '✅ Venda registrada com sucesso!';
+        saleMessage.classList.remove('hidden');
+        saleMessage.classList.remove('error');
+        saleMessage.classList.add('success');
+        successSound.play();
+
+        clientNameInput.value = '';
+        updateUI();
+      }
+
+      // Atualiza totais e tabelas
+      function updateUI() {
+        updateTotals();
+        updateProductsTable();
+        updateClientsTable();
+        updateCashBalance();
+        updateChart();
+        updatePrice();
+      }
+
+      // Atualiza total vendas e valor vendido
+      function updateTotals() {
+        totalSalesElem.textContent = sales.length;
+        const totalValue = sales.reduce((acc, cur) => acc + cur.price, 0);
+        totalValueElem.textContent = totalValue.toFixed(2).replace('.', ',');
+      }
+
+      // Atualiza tabela produtos mais vendidos
+      function updateProductsTable() {
+        const counts = {};
+        sales.forEach(sale => {
+          counts[sale.product] = (counts[sale.product] || 0) + 1;
+        });
+
+        // Ordena produtos mais vendidos
+        const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+
+        productsTableBody.innerHTML = '';
+        if(sorted.length === 0) {
+          productsTableBody.innerHTML = '<tr><td colspan="2">Nenhuma venda registrada.</td></tr>';
+          return;
+        }
+        for(const [product, qty] of sorted){
+          productsTableBody.innerHTML += `<tr><td>${product}</td><td>${qty}</td></tr>`;
+        }
+      }
+
+      // Atualiza tabela clientes que mais compraram (soma total)
+      function updateClientsTable() {
+        const clientTotals = {};
+        sales.forEach(sale => {
+          clientTotals[sale.client] = (clientTotals[sale.client] || 0) + sale.price;
+        });
+
+        // Ordena clientes que mais compraram
+        const sorted = Object.entries(clientTotals).sort((a,b) => b[1] - a[1]);
+
+        clientsTableBody.innerHTML = '';
+        if(sorted.length === 0) {
+          clientsTableBody.innerHTML = '<tr><td colspan="2">Nenhum cliente registrado.</td></tr>';
+          return;
+        }
+        for(const [client, total] of sorted){
+          clientsTableBody.innerHTML += `<tr><td>${client}</td><td>${formatMoney(total)}</td></tr>`;
+        }
+      }
+
+      // Exporta vendas para CSV
+      function exportCSV() {
+        if(sales.length === 0){
+          alert('Nenhuma venda para exportar!');
+          return;
+        }
+        let csv = 'Produto,Cliente,Preço (R$),Data\n';
+        sales.forEach(sale => {
+          csv += `${sale.product},${sale.client},${sale.price.toFixed(2).replace('.', ',')},${new Date(sale.date).toLocaleString('pt-BR')}\n`;
+        });
+
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'vendas.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // Caixa de dinheiro
+      function updateCashBalance(){
+        cashBalanceElem.textContent = `Saldo atual: ${formatMoney(cashBalance)}`;
+      }
+      function addCash() {
+        let amount = parseFloat(cashAmountInput.value);
+        if(isNaN(amount) || amount <= 0){
+          cashMessage.textContent = '⚠️ Informe um valor válido para adicionar ao caixa.';
+          cashMessage.classList.remove('hidden');
+          cashMessage.classList.remove('success');
+          cashMessage.classList.add('error');
+          errorSound.play();
+          return;
+        }
+        cashBalance += amount;
+        cashBalance = Math.round(cashBalance * 100) / 100; // evitar imprecisão float
+        localStorage.setItem('cashBalance', cashBalance.toString());
+        cashAmountInput.value = '';
+        cashMessage.textContent = '💵 Valor adicionado ao caixa com sucesso!';
+        cashMessage.classList.remove('hidden');
+        cashMessage.classList.remove('error');
+        cashMessage.classList.add('success');
+        successSound.play();
+        updateCashBalance();
+      }
+
+      // Animação simples no relatório para chamar atenção
+      let animationInterval;
+      function startAnimation(){
+        let colors = ['#2196f3', '#4caf50', '#f44336', '#ff9800'];
+        let i = 0;
+        animationDiv.textContent = '✨ Bem-vindo ao sistema! ✨';
+        animationInterval = setInterval(() => {
+          animationDiv.style.color = colors[i];
+          i = (i+1) % colors.length;
+        }, 700);
+      }
+      function stopAnimation(){
+        clearInterval(animationInterval);
+        animationDiv.textContent = '';
+      }
+
+      // Chart.js para gráfico de vendas por produto
+      function updateChart() {
+        const counts = {};
+        for(let prod in prices){
+          counts[prod] = 0;
+        }
+        sales.forEach(sale => {
+          counts[sale.product] += 1;
+        });
+        const labels = Object.keys(counts);
+        const data = Object.values(counts);
+
+        if(salesChart){
+          salesChart.data.labels = labels;
+          salesChart.data.datasets[0].data = data;
+          salesChart.update();
+        } else {
+          salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Vendas por Produto',
+                data: data,
+                backgroundColor: 'rgba(33, 150, 243, 0.7)',
+                borderColor: 'rgba(33, 150, 243, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  precision: 0
+                }
+              },
+              plugins: {
+                legend: { display: false }
+              }
+            }
+          });
+        }
+      }
+
+      // Inicialização
+      function init(){
+        updatePrice();
+        updateUI();
+      }
+
+      // Eventos
+      loginBtn.addEventListener('click', validateLogin);
+      logoutBtn.addEventListener('click', logout);
+      addSaleBtn.addEventListener('click', addSale);
+      exportBtn.addEventListener('click', exportCSV);
+      addCashBtn.addEventListener('click', addCash);
+
+      // Entrar com Enter no login
+      passwordInput.addEventListener('keydown', e => {
+        if(e.key === 'Enter') validateLogin();
+      });
+      usernameInput.addEventListener('keydown', e => {
+        if(e.key === 'Enter') validateLogin();
+      });
+
+      // Atualizar preço ao carregar
+      window.onload = () => {
+        init();
+      };
+    })();
+  </script>
+</body>
+</html>
+
+
