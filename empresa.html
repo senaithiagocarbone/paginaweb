@@ -142,7 +142,27 @@
     <input type="text" id="username" />
     <label for="password">🔑 Senha:</label>
     <input type="password" id="password" />
-    <button id="loginBtn">Entrar</button>
+    <button id="loginBtn" style="background-color:brown; color:white; border:none; padding:10px 20px; cursor:pointer; font-size:16px; border-radius:4px;">
+        🚪 Seja bem-vindo 🧍➡️
+      </button>
+      
+      <audio id="doorSound" src="https://actions.google.com/sounds/v1/doors/door_open_creak.ogg" preload="auto"></audio>
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const doorSound = document.getElementById('doorSound');
+          const loginBtn = document.getElementById('loginBtn');
+      
+          loginBtn.addEventListener('click', () => {
+            doorSound.currentTime = 0;
+            doorSound.play().catch(err => {
+              console.log('Erro ao tentar tocar o som:', err);
+            });
+          });
+        });
+      </script>
+      
+      
     <div id="loginError" class="error hidden">❌ Usuário ou senha incorretos!</div>
   </div>
 
@@ -219,6 +239,7 @@
       <thead><tr><th>Cliente</th><th>Total (R$)</th></tr></thead>
       <tbody></tbody>
     </table>
+
 
     <div id="animation"></div>
 
