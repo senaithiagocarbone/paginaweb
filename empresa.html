@@ -10,6 +10,7 @@
       background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
       margin: 0;
       padding: 0;
+      background-image: url(imagens/fundo.webp);
     }
     .container {
       max-width: 900px;
@@ -134,37 +135,96 @@
 </head>
 <body>
 
-  <!-- Login -->
-  <div class="container" id="loginScreen">
-    <img id="loginImage" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Roupas estilosas" />
-    <h1>🔐 Login - Loja de Roupas</h1>
-    <label for="username">👤 Usuário:</label>
-    <input type="text" id="username" />
-    <label for="password">🔑 Senha:</label>
-    <input type="password" id="password" />
-    <button id="loginBtn" style="background-color:brown; color:white; border:none; padding:10px 20px; cursor:pointer; font-size:16px; border-radius:4px;">
-        🚪 Seja bem-vindo 🧍➡️
-      </button>
+    <style>
+        /* Estilo geral da tela */
+        #loginScreen {
+          background-color: #4CAF50; /* Verde esperança */
+          max-width: 400px;
+          margin: 60px auto;
+          padding: 30px 40px;
+          border-radius: 12px;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          color: white;
+          text-align: center;
+        }
       
-      <audio id="doorSound" src="https://actions.google.com/sounds/v1/doors/door_open_creak.ogg" preload="auto"></audio>
+        #loginScreen img {
+          width: 100%;
+          max-height: 180px;
+          object-fit: cover;
+          border-radius: 10px;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
       
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const doorSound = document.getElementById('doorSound');
-          const loginBtn = document.getElementById('loginBtn');
+        #loginScreen h1 {
+          margin-bottom: 25px;
+          font-weight: 700;
+          font-size: 1.8rem;
+          text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+        }
       
-          loginBtn.addEventListener('click', () => {
-            doorSound.currentTime = 0;
-            doorSound.play().catch(err => {
-              console.log('Erro ao tentar tocar o som:', err);
-            });
-          });
-        });
-      </script>
+        #loginScreen label {
+          display: block;
+          text-align: left;
+          margin: 15px 0 6px 0;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+      
+        #loginScreen input[type="text"],
+        #loginScreen input[type="password"] {
+          width: 100%;
+          padding: 10px 14px;
+          border-radius: 8px;
+          border: none;
+          font-size: 1rem;
+          outline: none;
+          box-sizing: border-box;
+          transition: box-shadow 0.3s ease;
+        }
+      
+        #loginScreen input[type="text"]:focus,
+        #loginScreen input[type="password"]:focus {
+          box-shadow: 0 0 8px 2px #a5d6a7;
+        }
+      
+        #loginBtn {
+          margin-top: 30px;
+          width: 100%;
+          background-color: #6d4c41; /* Marrom escuro */
+          color: white;
+          border: none;
+          padding: 14px 0;
+          font-size: 1.2rem;
+          font-weight: 700;
+          border-radius: 10px;
+          cursor: pointer;
+          box-shadow: 0 5px 12px rgba(109,76,65,0.6);
+          transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+      
+        #loginBtn:hover {
+          background-color: #5d3a29;
+          box-shadow: 0 7px 15px rgba(93,58,41,0.8);
+        }
+      </style>
+      
+      <div class="container" id="loginScreen">
+        <img id="loginImage" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Roupas estilosas" />
+        <h1>🔐 Login - Loja de Roupas</h1>
+        <label for="username">👤 Usuário:</label>
+        <input type="text" id="username" placeholder="Digite seu usuário" />
+        <label for="password">🔑 Senha:</label>
+        <input type="password" id="password" placeholder="Digite sua senha" />
+        <button id="loginBtn">
+          🚪 Seja bem-vindo 🧍➡️
+        </button>
+      </div>
       
       
-    <div id="loginError" class="error hidden">❌ Usuário ou senha incorretos!</div>
-  </div>
+      
 
   <!-- Sistema -->
   <div class="container hidden" id="mainScreen">
@@ -240,38 +300,38 @@
       <tbody></tbody>
     </table>
 
-
     <div id="animation"></div>
 
     <!-- Gráfico -->
-    <canvas id="salesChart" aria-label="Gráfico de vendas por produto" role="img"></canvas>
+    <canvas id="salesChart" aria-label="Gráfico de vendas" role="img"></canvas>
   </div>
 
-  <!-- Áudios -->
-  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="errorSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+  <!-- Sons -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+  <audio id="errorSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // Produtos e preços fixos
+    // Dados dos preços fixos
     const prices = {
-      "Camiseta": 50.00,
-      "Calça": 90.00,
-      "Vestido": 120.00,
-      "Jaqueta": 150.00,
-      "Sapato": 110.00
+      'Camiseta': 50.00,
+      'Calça': 90.00,
+      'Vestido': 120.00,
+      'Jaqueta': 150.00,
+      'Sapato': 110.00,
     };
 
-    // Seletores
+    // Elementos DOM
     const loginScreen = document.getElementById('loginScreen');
     const mainScreen = document.getElementById('mainScreen');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
     const loginError = document.getElementById('loginError');
+
+    const logoutBtn = document.getElementById('logoutBtn');
 
     const productSelect = document.getElementById('productSelect');
     const clientNameInput = document.getElementById('clientName');
@@ -288,7 +348,7 @@
 
     const exportBtn = document.getElementById('exportBtn');
 
-    // Caixa dinheiro
+    // Caixa
     const cashAmountInput = document.getElementById('cashAmount');
     const addCashBtn = document.getElementById('addCashBtn');
     const cashBalanceElem = document.getElementById('cashBalance');
@@ -297,121 +357,80 @@
     // Sons
     const successSound = document.getElementById('successSound');
     const errorSound = document.getElementById('errorSound');
+    const doorSound = document.getElementById('doorSound');
 
-    // Chart.js
+    // Chart
     const ctx = document.getElementById('salesChart').getContext('2d');
     let salesChart;
 
-    // Local Storage keys
-    const STORAGE_SALES = 'store_sales';
-    const STORAGE_CASH = 'store_cash';
-
-    // Função para formatar valor em moeda BRL
-    function formatCurrency(value) {
-      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    // Utilitários LocalStorage
+    function loadSales() {
+      return JSON.parse(localStorage.getItem('sales')) || [];
+    }
+    function saveSales(sales) {
+      localStorage.setItem('sales', JSON.stringify(sales));
+    }
+    function loadCash() {
+      return parseFloat(localStorage.getItem('cash')) || 0;
+    }
+    function saveCash(value) {
+      localStorage.setItem('cash', value.toFixed(2));
     }
 
-    // Atualiza preço ao mudar o produto selecionado
+    // Atualiza preço conforme produto
     function updatePrice() {
       const product = productSelect.value;
-      priceInput.value = prices[product].toFixed(2);
+      priceInput.value = prices[product].toFixed(2).replace('.', ',');
     }
 
     productSelect.addEventListener('change', updatePrice);
 
-    // Inicializa preço na carga
-    updatePrice();
-
-    // Função para carregar vendas do localStorage
-    function loadSales() {
-      const salesStr = localStorage.getItem(STORAGE_SALES);
-      if (!salesStr) return [];
-      try {
-        return JSON.parse(salesStr);
-      } catch {
-        return [];
-      }
-    }
-
-    // Função para salvar vendas no localStorage
-    function saveSales(sales) {
-      localStorage.setItem(STORAGE_SALES, JSON.stringify(sales));
-    }
-
-    // Função para carregar saldo do caixa
-    function loadCash() {
-      const cashStr = localStorage.getItem(STORAGE_CASH);
-      if (!cashStr) return 0;
-      const val = parseFloat(cashStr);
-      return isNaN(val) ? 0 : val;
-    }
-
-    // Função para salvar saldo do caixa
-    function saveCash(cash) {
-      localStorage.setItem(STORAGE_CASH, cash.toFixed(2));
-    }
-
-    // Atualiza interface do saldo caixa
-    function updateCashUI() {
-      const cash = loadCash();
-      cashBalanceElem.textContent = `Saldo atual: ${formatCurrency(cash)}`;
-    }
-
-    // Registra venda
+    // Registrar venda
     addSaleBtn.addEventListener('click', () => {
       const product = productSelect.value;
       const client = clientNameInput.value.trim();
       const price = prices[product];
 
       if (!client) {
-        saleMessage.textContent = '⚠️ Por favor, informe o nome do cliente.';
+        saleMessage.textContent = '⚠️ Informe o nome do cliente.';
         saleMessage.className = 'error';
         errorSound.play();
         return;
       }
 
-      let sales = loadSales();
-
-      sales.push({
-        product,
-        client,
-        price,
-        date: new Date().toISOString()
-      });
-
+      const sales = loadSales();
+      const now = new Date();
+      sales.push({ product, client, price, date: now.toISOString() });
       saveSales(sales);
 
-      // Atualiza relatório e UI
-      updateReports();
-      saleMessage.textContent = '✅ Venda registrada com sucesso!';
+      saleMessage.textContent = `✅ Venda de ${product} para ${client} registrada!`;
       saleMessage.className = 'success';
       successSound.play();
 
-      // Limpar campo cliente
+      // Limpar campos
       clientNameInput.value = '';
-
-      // Animação rápida
-      animateSale();
-
-      // Atualiza gráfico
+      updateReports();
       updateChart();
+      animateSale();
     });
 
-    // Atualiza relatórios de vendas
+    // Atualiza relatórios
     function updateReports() {
       const sales = loadSales();
 
-      // Total vendas e valor
+      // Total vendas
       totalSalesElem.textContent = sales.length;
+
+      // Valor total vendido
       const totalValue = sales.reduce((acc, s) => acc + s.price, 0);
       totalValueElem.textContent = totalValue.toFixed(2).replace('.', ',');
 
       // Produtos mais vendidos
-      const productsCount = {};
+      const productCounts = {};
       sales.forEach(s => {
-        productsCount[s.product] = (productsCount[s.product] || 0) + 1;
+        productCounts[s.product] = (productCounts[s.product] || 0) + 1;
       });
-      const productsSorted = Object.entries(productsCount).sort((a,b) => b[1] - a[1]);
+      const productsSorted = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
       productsTableBody.innerHTML = '';
       productsSorted.forEach(([prod, qty]) => {
         const tr = document.createElement('tr');
@@ -419,59 +438,86 @@
         productsTableBody.appendChild(tr);
       });
 
-      // Clientes que mais compraram (total gasto)
-      const clientsSpent = {};
+      // Clientes que mais compraram (total em R$)
+      const clientsTotal = {};
       sales.forEach(s => {
-        clientsSpent[s.client] = (clientsSpent[s.client] || 0) + s.price;
+        clientsTotal[s.client] = (clientsTotal[s.client] || 0) + s.price;
       });
-      const clientsSorted = Object.entries(clientsSpent).sort((a,b) => b[1] - a[1]);
+      const clientsSorted = Object.entries(clientsTotal).sort((a,b) => b[1] - a[1]);
       clientsTableBody.innerHTML = '';
-      clientsSorted.forEach(([client, spent]) => {
+      clientsSorted.forEach(([client, total]) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${client}</td><td>${formatCurrency(spent)}</td>`;
+        tr.innerHTML = `<td>${client}</td><td>${total.toFixed(2).replace('.', ',')}</td>`;
         clientsTableBody.appendChild(tr);
       });
     }
 
-    // Exporta vendas para CSV
-    exportBtn.addEventListener('click', () => {
+    // Atualiza gráfico com Chart.js
+    function updateChart() {
       const sales = loadSales();
-      if(sales.length === 0) {
-        alert('Nenhuma venda para exportar.');
-        return;
-      }
-      let csvContent = 'data:text/csv;charset=utf-8,';
-      csvContent += 'Produto,Cliente,Preço (R$),Data\n';
-      sales.forEach(sale => {
-        // Formata data local
-        const date = new Date(sale.date).toLocaleString('pt-BR');
-        // CSV separado por vírgulas, campos escapados com aspas duplas se necessário
-        const line = `"${sale.product}","${sale.client}","${sale.price.toFixed(2)}","${date}"`;
-        csvContent += line + '\n';
-      });
-      // Criar link para download
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      const now = new Date();
-      const timestamp = now.toISOString().slice(0,10).replace(/-/g,'');
-      link.setAttribute('download', `vendas_loja_${timestamp}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+      const products = Object.keys(prices);
+      const counts = products.map(p => sales.filter(s => s.product === p).length);
 
-    // Animação simples após registrar venda
-    function animateSale() {
-      animationDiv.textContent = '🎉 Venda registrada! 🎉';
-      setTimeout(() => animationDiv.textContent = '', 3000);
+      if (salesChart) salesChart.destroy();
+
+      salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: products,
+          datasets: [{
+            label: 'Quantidade Vendida',
+            data: counts,
+            backgroundColor: '#2196f3'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, precision: 0 }
+          }
+        }
+      });
     }
 
-    // Caixa dinheiro: adicionar valor
+    // Animação rápida após venda
+    function animateSale() {
+      animationDiv.textContent = '💾 Venda registrada com sucesso! 🎉';
+      setTimeout(() => {
+        animationDiv.textContent = '';
+      }, 2500);
+    }
+
+    // Exportar CSV das vendas
+    exportBtn.addEventListener('click', () => {
+      const sales = loadSales();
+      if (sales.length === 0) {
+        alert('Nenhuma venda para exportar!');
+        return;
+      }
+
+      let csv = 'Produto,Cliente,Preço (R$),Data\n';
+      sales.forEach(s => {
+        const d = new Date(s.date);
+        const dateStr = d.toLocaleString('pt-BR');
+        csv += `${s.product},${s.client},${s.price.toFixed(2).replace('.', ',')},${dateStr}\n`;
+      });
+
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'vendas.csv';
+      a.click();
+
+      URL.revokeObjectURL(url);
+    });
+
+    // Caixa: adicionar dinheiro
     addCashBtn.addEventListener('click', () => {
       const amount = parseFloat(cashAmountInput.value);
       if (isNaN(amount) || amount <= 0) {
-        cashMessage.textContent = '⚠️ Informe um valor válido maior que zero.';
+        cashMessage.textContent = '⚠️ Informe um valor válido para adicionar.';
         cashMessage.className = 'error';
         errorSound.play();
         return;
@@ -487,76 +533,31 @@
       successSound.play();
 
       cashAmountInput.value = '';
+      setTimeout(() => {
+        cashMessage.textContent = '';
+      }, 3000);
     });
 
-    // Atualiza gráfico de vendas por produto
-    function updateChart() {
-      const sales = loadSales();
-      const counts = {};
-      Object.keys(prices).forEach(p => counts[p] = 0);
-      sales.forEach(s => {
-        if (counts.hasOwnProperty(s.product)) counts[s.product]++;
-      });
-      const labels = Object.keys(prices);
-      const data = labels.map(p => counts[p]);
-
-      if(salesChart) {
-        salesChart.data.datasets[0].data = data;
-        salesChart.update();
-      } else {
-        salesChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels,
-            datasets: [{
-              label: 'Quantidade Vendida',
-              data,
-              backgroundColor: 'rgba(33, 150, 243, 0.7)'
-            }]
-          },
-          options: {
-            scales: {
-              y: { beginAtZero: true, precision: 0 }
-            },
-            plugins: {
-              legend: { display: false }
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-          }
-        });
-      }
+    // Atualiza saldo do caixa na tela
+    function updateCashUI() {
+      const cash = loadCash();
+      cashBalanceElem.textContent = `Saldo atual: R$ ${cash.toFixed(2).replace('.', ',')}`;
     }
 
-    // Autenticação simples
-    function authenticate(user, pass) {
-      return user === 'admin' && pass === '1234';
-    }
+    // Login e Logout
+    loginBtn.addEventListener('click', () => {
+      const user = usernameInput.value.trim();
+      const pass = passwordInput.value;
 
-    // Inicialização da interface
-    function init() {
-      // Verificar se já está logado
-      if(localStorage.getItem('loggedIn') === 'true') {
+      if (user === 'admin' && pass === '1234') {
         loginScreen.classList.add('hidden');
         mainScreen.classList.remove('hidden');
+        loginError.classList.add('hidden');
+        doorSound.play();
+
         updateReports();
         updateChart();
         updateCashUI();
-      } else {
-        loginScreen.classList.remove('hidden');
-        mainScreen.classList.add('hidden');
-      }
-    }
-
-    loginBtn.addEventListener('click', () => {
-      const user = usernameInput.value.trim();
-      const pass = passwordInput.value.trim();
-      if(authenticate(user, pass)) {
-        localStorage.setItem('loggedIn', 'true');
-        loginError.classList.add('hidden');
-        usernameInput.value = '';
-        passwordInput.value = '';
-        init();
       } else {
         loginError.classList.remove('hidden');
         errorSound.play();
@@ -564,17 +565,17 @@
     });
 
     logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('loggedIn');
-      init();
+      mainScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+      usernameInput.value = '';
+      passwordInput.value = '';
+      saleMessage.textContent = '';
+      cashMessage.textContent = '';
+      animationDiv.textContent = '';
     });
 
-    // Atualizar preço ao carregar página
+    // Inicialização
     updatePrice();
-
-    // Inicializar app
-    init();
-
   </script>
-
 </body>
 </html>
