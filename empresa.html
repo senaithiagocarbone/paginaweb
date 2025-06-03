@@ -10,9 +10,9 @@
       background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
       margin: 0;
       padding: 0;
-      background-image: url(imagens/fundo.webp);
+      background-image: url(IMAGEM/FUNDO.webp);
     }
-    .container {
+    container {
       max-width: 900px;
       margin: 2rem auto;
       background: white;
@@ -33,7 +33,7 @@
       width: 100%;
       padding: 0.5rem;
       margin-top: 0.3rem;
-      border: 1px solid #ccc;
+      border: 1px solid #cccccc;
       border-radius: 6px;
       box-sizing: border-box;
     }
@@ -61,24 +61,49 @@
       color: white;
       float: right;
     }
-    #addSaleBtn, #exportBtn, #addCashBtn {
-      background-color: #2196f3;
-      color: white;
-    }
+    button {
+  background: linear-gradient(to right, #2e7d32, #1565c0); /* verde natureza + azul escuro */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
     }
     th, td {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      text-align: center;
+        border: 1px solid #1e3e72; /* azul escuro */
+box-shadow: 0 0 5px 0 #66bb6a; /* verde esperança sombra */
+padding: 0.5rem;
+text-align: center;
+border: 4px solid; /* deve ter largura para o border-image funcionar */
+border-image: linear-gradient(45deg, #1e3e72, #66bb6a) 1;
+padding: 0.5rem;
+text-align: center;
     }
+
     th {
-      background-color: #2196f3;
-      color: white;
-    }
+  background: linear-gradient(45deg, #388e3c, #81c784); /* verde natureza escuro para claro */
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  border: 1px solid #388e3c; /* borda verde natureza escuro */
+}
+
+
     .success {
       color: green;
       text-align: center;
@@ -109,15 +134,121 @@
       max-width: 700px;
       margin: 2rem auto 0 auto;
     }
-    /* Caixa de dinheiro */
-    #cashContainer {
-      margin-top: 2rem;
-      border: 2px dashed #2196f3;
-      padding: 1.5rem;
-      border-radius: 10px;
-      background: #e3f2fd;
-      position: relative;
-    }
+
+
+/* Container principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Imagens laterais decorativas */
+.side-decor-img {
+  width: 100px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+}
+.side-decor-left {
+  left: -110px;
+}
+.side-decor-right {
+  right: -110px;
+}
+
+/* Caixa de dinheiro - verde natureza */
+#cashContainer {
+  background: linear-gradient(to right, #66bb6a, #43a047); /* verde suave */
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
+
+#cashContainer h2,
+#cashContainer label,
+#cashContainer div {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Botão adicionar ao caixa */
+#addCashBtn {
+  background-color: #1b5e20;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  margin-top: 10px;
+}
+#addCashBtn:hover {
+  transform: scale(1.05);
+  background-color: #2e7d32;
+}
+
+/* Estilo para tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+th {
+  background-color: #90caf9;
+  color: #0d47a1;
+}
+
+/* Input e Select */
+input[type="text"],
+input[type="number"],
+select {
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
+
+/* Botões gerais */
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+button:hover {
+  background-color: #1565c0;
+}
+
+/* Mensagens de sucesso */
+.success {
+  color: #388e3c;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.hidden {
+  display: none;
+}
+    
     #cashEmojis {
       font-size: 2rem;
       text-align: center;
@@ -222,15 +353,11 @@
           🚪 Seja bem-vindo 🧍➡️
         </button>
       </div>
-      
-      
-      
-
-  <!-- Sistema -->
+ 
   <div class="container hidden" id="mainScreen">
     <button id="logoutBtn">🚪 Logout</button>
     <h1>📈 Gestão da Loja de Roupas</h1>
-
+  
     <h2>🛒 Registrar Venda</h2>
 
     <h3>📋 Tabela de Preços</h3>
@@ -265,16 +392,17 @@
     <button id="addSaleBtn">💾 Registrar Venda</button>
     <div id="saleMessage" class="success hidden"></div>
 
-    <!-- Caixa de dinheiro -->
-    <div id="cashContainer">
-      <div id="cashEmojis">💵💰🪙💸</div>
-      <h2>💵 Caixa de Dinheiro - Pagamento à Vista</h2>
-      <label for="cashAmount">💸 Valor a adicionar (R$):</label>
-      <input type="number" id="cashAmount" min="0" step="0.01" placeholder="Ex: 100.00" />
-      <button id="addCashBtn">➕ Adicionar ao Caixa</button>
-      <div id="cashBalance">Saldo atual: R$ 0,00</div>
-      <div id="cashMessage" class="success hidden"></div>
-    </div>
+  <!-- Caixa de dinheiro -->
+<div id="cashContainer">
+    <div id="cashEmojis">💵💰🪙💸</div>
+    <h2>💵 Caixa de Dinheiro - Pagamento à Vista</h2>
+    <label for="cashAmount">💸 Valor a adicionar (R$):</label>
+    <input type="number" id="cashAmount" min="0" step="0.01" placeholder="Ex: 100.00" />
+    <button id="addCashBtn">➕ Adicionar ao Caixa</button>
+    <div id="cashBalance">Saldo atual: R$ 0,00</div>
+    <div id="cashMessage" class="success hidden"></div>
+  </div>
+  
 
     <h2>📈 Relatórios</h2>
     <button id="exportBtn">📄 Exportar CSV</button>
