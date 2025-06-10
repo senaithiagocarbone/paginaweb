@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🛙 Sistema de Gestão - Loja de Roupas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+      margin: 0;
+      padding: 0;
+      background-image: url(imagem/logo.webp);
+    }
+    container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    input[readonly] {
+      background-color: #f0f0f0;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      filter: brightness(90%);
+    }
+    #loginBtn {
+      background-color: #4caf50;
+      color: white;
+    }
+    #logoutBtn {
+      background-color: #f44336;
+      color: white;
+      float: right;
+    }
+    button {
+  background: linear-gradient(to right, #2e7d32, #1565c0); /* verde natureza + azul escuro */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+        border: 1px solid #1e3e72; /* azul escuro */
+box-shadow: 0 0 5px 0 #66bb6a; /* verde esperança sombra */
+padding: 0.5rem;
+text-align: center;
+border: 4px solid; /* deve ter largura para o border-image funcionar */
+border-image: linear-gradient(45deg, #1e3e72, #66bb6a) 1;
+padding: 0.5rem;
+text-align: center;
+    }
+
+    th {
+  background: linear-gradient(45deg, #388e3c, #81c784); /* verde natureza escuro para claro */
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  border: 1px solid #388e3c; /* borda verde natureza escuro */
+}
+
+
+    .success {
+      color: green;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .hidden {
+      display: none;
+    }
+    #animation {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 1.5rem;
+    }
+    #loginImage {
+      display: block;
+      margin: 0 auto 1rem auto;
+      max-width: 150px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    /* Estilo para o canvas do gráfico */
+    #salesChart {
+      max-width: 700px;
+      margin: 2rem auto 0 auto;
+    }
+
+
+/* Container principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Imagens laterais decorativas */
+.side-decor-img {
+  width: 100px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+}
+.side-decor-left {
+  left: -110px;
+}
+.side-decor-right {
+  right: -110px;
+}
+
+/* Caixa de dinheiro - verde natureza */
+#cashContainer {
+  background: linear-gradient(to right, #66bb6a, #43a047); /* verde suave */
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
+
+#cashContainer h2,
+#cashContainer label,
+#cashContainer div {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Botão adicionar ao caixa */
+#addCashBtn {
+  background-color: #1b5e20;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  margin-top: 10px;
+}
+#addCashBtn:hover {
+  transform: scale(1.05);
+  background-color: #2e7d32;
+}
+
+/* Estilo para tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+th {
+  background-color: #90caf9;
+  color: #0d47a1;
+}
+
+/* Input e Select */
+input[type="text"],
+input[type="number"],
+select {
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
+
+/* Botões gerais */
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+button:hover {
+  background-color: #1565c0;
+}
+
+/* Mensagens de sucesso */
+.success {
+  color: #388e3c;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.hidden {
+  display: none;
+}
+    
+    #cashEmojis {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+    #cashBalance {
+      font-weight: bold;
+      font-size: 1.25rem;
+      margin-top: 0.5rem;
+      text-align: center;
+      color: #2e7d32;
+    }
+  </style>
+   </style>
+</head>
+</head>
+<body>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #a8d5a2; /* verde natureza suave */
+        color: black;
+      }
+  
+      .container {
+        max-width: 400px;
+        margin: 40px auto;
+        background-color: #ffffffcc; /* branco com leve transparência */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      }
+  
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        color: black;
+      }
+  
+      input, select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        border: 1px solid #555;
+        color: black;
+        background-color: #f2f2f2;
+        font-size: 14px;
+      }
+  
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+  
+      button:hover {
+        background-color: #388e3c;
+      }
+  
+      #fraseDivertida {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #333;
+        background-color: #e1f5e0;
+        padding: 10px;
+        border-radius: 8px;
+      }
+  
+      #loginImage {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+    </style>
+  <div class="container" id="loginScreen">
+    <img id="loginImage" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Roupas estilosas" />
+    <h1>🔐 Login - Loja de Roupas</h1>
+
+    <label for="fullname">📛 Nome completo:</label>
+    <input type="text" id="fullname" placeholder="Digite seu nome completo" />
+
+    <label for="sexo">🚻 Sexo:</label>
+    <select id="sexo">
+      <option value="">Selecione</option>
+      <option value="masculino">Masculino 🚹</option>
+      <option value="feminino">Feminino 🚺</option>
+    </select>
+
+    <label for="username">👤 Usuário:</label>
+    <input type="text" id="username" placeholder="Digite seu usuário" />
+
+    <label for="password">🔑 Senha:</label>
+    <input type="password" id="password" placeholder="Digite sua senha" />
+
+    <label for="cpf">🧾 CPF:</label>
+    <input type="text" id="cpf" placeholder="Digite seu CPF" maxlength="14" />
+
+    <label for="dob">📅 Data de Nascimento:</label>
+    <input type="date" id="dob" />
+
+    <button id="loginBtn">🚪 Seja bem-vindo 🧍➡️</button>
+
+    <p id="fraseDivertida">
+      🛍️✨ <strong>Sejam bem-vindos à nossa loja de roupas!</strong> 👗👕<br />
+      Entre, compre tudo o que quiser como se fosse <em>sua própria loja</em>! 🏬💳<br />
+      Divirtam-se muuuito! 😄🎉🧥👠🧢👚
+    </p>
+  </div>
+
+  <!-- Som de clique -->
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3cfa3fd84e.mp3?filename=click-124467.mp3"></audio>
+
+  <!-- Script de confetes -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    // Máscara para CPF
+    const cpfInput = document.getElementById("cpf");
+    cpfInput.addEventListener("input", function () {
+      let value = cpfInput.value.replace(/\D/g, "");
+      if (value.length > 11) value = value.slice(0, 11);
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      cpfInput.value = value;
+    });
+
+    // Clique com validação
+    const loginbtn = document.getElementById("loginBtn");
+    const clickSound = document.getElementById("clickSound");
+
+    loginBtn.addEventListener("click", () => {
+      const fullname = document.getElementById("fullname").value.trim();
+      const sexo = document.getElementById("sexo").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const cpf = document.getElementById("cpf").value.trim();
+      const dob = document.getElementById("dob").value;
+
+      if (!fullname || !sexo || !username || !password || !cpf || !dob) {
+        alert("⚠️ Por favor, preencha todos os campos obrigatórios! 📝");
+        return;
+      }
+
+      clickSound.play();
+
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#4CAF50", "#FFEB3B", "#FF9800", "#FF4081"],
+      });
+
+      // Redirecionamento opcional:
+      // setTimeout(() => {
+      //   window.location.href = "sistema.html";
+      // }, 2000);
+    });
+  </script>
+</body>
+  
+  <div class="container hidden" id="mainScreen">
+    <button id="logoutBtn">🚪 Logout</button>
+    <h1>📈 Gestão da Loja de Roupas</h1>
+  
+    <h2>🛒 Registrar Venda</h2>
+
+    <h3>📋 Tabela de Preços</h3>
+    <table>
+      <thead>
+        <tr><th>Produto</th><th>Preço (R$)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Camiseta 👕</td><td>50,00</td></tr>
+        <tr><td>Calça 👖</td><td>90,00</td></tr>
+        <tr><td>Vestido 👗</td><td>120,00</td></tr>
+        <tr><td>Jaqueta 🧥</td><td>150,00</td></tr>
+        <tr><td>Sapato 👟</td><td>110,00</td></tr>
+      </tbody>
+    </table>
+
+    <label for="productSelect">👕 Produto:</label>
+    <select id="productSelect">
+      <option value="Camiseta">Camiseta 👕</option>
+      <option value="Calça">Calça 👖</option>
+      <option value="Vestido">Vestido 👗</option>
+      <option value="Jaqueta">Jaqueta 🧥</option>
+      <option value="Sapato">Sapato 👟</option>
+    </select>
+
+    <label for="clientName">🧑 Cliente:</label>
+    <input type="text" id="clientName" />
+
+    <label for="price">💰 Preço (R$):</label>
+    <input type="text" id="price" readonly />
+
+    <button id="addSaleBtn">💾 Registrar Venda</button>
+    <div id="saleMessage" class="success hidden"></div>
+
+  <!-- Caixa de dinheiro -->
+<div id="cashContainer">
+    <div id="cashEmojis">💵💰🪙💸</div>
+    <h2>💵 Caixa de Dinheiro - Pagamento à Vista</h2>
+    <label for="cashAmount">💸 Valor a adicionar (R$):</label>
+    <input type="number" id="cashAmount" min="0" step="0.01" placeholder="Ex: 100.00" />
+    <button id="addCashBtn">➕ Adicionar ao Caixa</button>
+    <div id="cashBalance">Saldo atual: R$ 0,00</div>
+    <div id="cashMessage" class="success hidden"></div>
+  </div>
+  
+
+    <h2>📈 Relatórios</h2>
+    <button id="exportBtn">📄 Exportar CSV</button>
+
+    <table>
+      <thead>
+        <tr><th>📦 Total de Vendas</th><th>💲 Valor Total Vendido</th></tr>
+      </thead>
+      <tbody>
+        <tr><td id="totalSales">0</td><td id="totalValue">0,00</td></tr>
+      </tbody>
+    </table>
+
+    <h3>🔥 Produtos Mais Vendidos</h3>
+    <table id="productsTable">
+      <thead><tr><th>Produto</th><th>Quantidade</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>🏆 Clientes que Mais Compraram</h3>
+    <table id="clientsTable">
+      <thead><tr><th>Cliente</th><th>Total (R$)</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="animation"></div>
+
+    <!-- Gráfico -->
+    <canvas id="salesChart" aria-label="Gráfico de vendas" role="img"></canvas>
+  </div>
+
+  <!-- Sons -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+  <audio id="errorSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Dados dos preços fixos
+    const prices = {
+      'Camiseta': 50.00,
+      'Calça': 90.00,
+      'Vestido': 120.00,
+      'Jaqueta': 150.00,
+      'Sapato': 110.00,
+    };
+
+    // Elementos DOM
+    const loginScreen = document.getElementById('loginScreen');
+    const mainScreen = document.getElementById('mainScreen');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const productSelect = document.getElementById('productSelect');
+    const clientNameInput = document.getElementById('clientName');
+    const priceInput = document.getElementById('price');
+    const addSaleBtn = document.getElementById('addSaleBtn');
+    const saleMessage = document.getElementById('saleMessage');
+
+    const totalSalesElem = document.getElementById('totalSales');
+    const totalValueElem = document.getElementById('totalValue');
+    const productsTableBody = document.querySelector('#productsTable tbody');
+    const clientsTableBody = document.querySelector('#clientsTable tbody');
+
+    const animationDiv = document.getElementById('animation');
+
+    const exportBtn = document.getElementById('exportBtn');
+
+    // Caixa
+    const cashAmountInput = document.getElementById('cashAmount');
+    const addCashBtn = document.getElementById('addCashBtn');
+    const cashBalanceElem = document.getElementById('cashBalance');
+    const cashMessage = document.getElementById('cashMessage');
+
+    // Sons
+    const successSound = document.getElementById('successSound');
+    const errorSound = document.getElementById('errorSound');
+    const doorSound = document.getElementById('doorSound');
+
+    // Chart
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    let salesChart;
+
+    // Utilitários LocalStorage
+    function loadSales() {
+      return JSON.parse(localStorage.getItem('sales')) || [];
+    }
+    function saveSales(sales) {
+      localStorage.setItem('sales', JSON.stringify(sales));
+    }
+    function loadCash() {
+      return parseFloat(localStorage.getItem('cash')) || 0;
+    }
+    function saveCash(value) {
+      localStorage.setItem('cash', value.toFixed(2));
+    }
+
+    // Atualiza preço conforme produto
+    function updatePrice() {
+      const product = productSelect.value;
+      priceInput.value = prices[product].toFixed(2).replace('.', ',');
+    }
+
+    productSelect.addEventListener('change', updatePrice);
+
+    // Registrar venda
+    addSaleBtn.addEventListener('click', () => {
+      const product = productSelect.value;
+      const client = clientNameInput.value.trim();
+      const price = prices[product];
+
+      if (!client) {
+        saleMessage.textContent = '⚠️ Informe o nome do cliente.';
+        saleMessage.className = 'error';
+        errorSound.play();
+        return;
+      }
+
+      const sales = loadSales();
+      const now = new Date();
+      sales.push({ product, client, price, date: now.toISOString() });
+      saveSales(sales);
+
+      saleMessage.textContent = `✅ Venda de ${product} para ${client} registrada!`;
+      saleMessage.className = 'success';
+      successSound.play();
+
+      // Limpar campos
+      clientNameInput.value = '';
+      updateReports();
+      updateChart();
+      animateSale();
+    });
+
+    // Atualiza relatórios
+    function updateReports() {
+      const sales = loadSales();
+
+      // Total vendas
+      totalSalesElem.textContent = sales.length;
+
+      // Valor total vendido
+      const totalValue = sales.reduce((acc, s) => acc + s.price, 0);
+      totalValueElem.textContent = totalValue.toFixed(2).replace('.', ',');
+
+      // Produtos mais vendidos
+      const productCounts = {};
+      sales.forEach(s => {
+        productCounts[s.product] = (productCounts[s.product] || 0) + 1;
+      });
+      const productsSorted = Object.entries(productCounts).sort((a,b) => b[1] - a[1]);
+      productsTableBody.innerHTML = '';
+      productsSorted.forEach(([prod, qty]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${prod}</td><td>${qty}</td>`;
+        productsTableBody.appendChild(tr);
+      });
+
+      // Clientes que mais compraram (total em R$)
+      const clientsTotal = {};
+      sales.forEach(s => {
+        clientsTotal[s.client] = (clientsTotal[s.client] || 0) + s.price;
+      });
+      const clientsSorted = Object.entries(clientsTotal).sort((a,b) => b[1] - a[1]);
+      clientsTableBody.innerHTML = '';
+      clientsSorted.forEach(([client, total]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${client}</td><td>${total.toFixed(2).replace('.', ',')}</td>`;
+        clientsTableBody.appendChild(tr);
+      });
+    }
+
+    // Atualiza gráfico com Chart.js
+    function updateChart() {
+      const sales = loadSales();
+      const products = Object.keys(prices);
+      const counts = products.map(p => sales.filter(s => s.product === p).length);
+
+      if (salesChart) salesChart.destroy();
+
+      salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: products,
+          datasets: [{
+            label: 'Quantidade Vendida',
+            data: counts,
+            backgroundColor: '#2196f3'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, precision: 0 }
+          }
+        }
+      });
+    }
+
+    // Animação rápida após venda
+    function animateSale() {
+      animationDiv.textContent = '💾 Venda registrada com sucesso! 🎉';
+      setTimeout(() => {
+        animationDiv.textContent = '';
+      }, 2500);
+    }
+
+    // Exportar CSV das vendas
+    exportBtn.addEventListener('click', () => {
+      const sales = loadSales();
+      if (sales.length === 0) {
+        alert('Nenhuma venda para exportar!');
+        return;
+      }
+
+      let csv = 'Produto,Cliente,Preço (R$),Data\n';
+      sales.forEach(s => {
+        const d = new Date(s.date);
+        const dateStr = d.toLocaleString('pt-BR');
+        csv += `${s.product},${s.client},${s.price.toFixed(2).replace('.', ',')},${dateStr}\n`;
+      });
+
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'vendas.csv';
+      a.click();
+
+      URL.revokeObjectURL(url);
+    });
+
+    // Caixa: adicionar dinheiro
+    addCashBtn.addEventListener('click', () => {
+      const amount = parseFloat(cashAmountInput.value);
+      if (isNaN(amount) || amount <= 0) {
+        cashMessage.textContent = '⚠️ Informe um valor válido para adicionar.';
+        cashMessage.className = 'error';
+        errorSound.play();
+        return;
+      }
+
+      let currentCash = loadCash();
+      currentCash += amount;
+      saveCash(currentCash);
+      updateCashUI();
+
+      cashMessage.textContent = `✅ R$ ${amount.toFixed(2).replace('.', ',')} adicionado ao caixa.`;
+      cashMessage.className = 'success';
+      successSound.play();
+
+      cashAmountInput.value = '';
+      setTimeout(() => {
+        cashMessage.textContent = '';
+      }, 3000);
+    });
+
+    // Atualiza saldo do caixa na tela
+    function updateCashUI() {
+      const cash = loadCash();
+      cashBalanceElem.textContent = `Saldo atual: R$ ${cash.toFixed(2).replace('.', ',')}`;
+    }
+
+    // Login e Logout
+    loginBtn.addEventListener('click', () => {
+      const user = usernameInput.value.trim();
+      const pass = passwordInput.value;
+
+      if (user === 'admin' && pass === '1234') {
+        loginScreen.classList.add('hidden');
+        mainScreen.classList.remove('hidden');
+        loginError.classList.add('hidden');
+        doorSound.play();
+
+        updateReports();
+        updateChart();
+        updateCashUI();
+      } else {
+        loginError.classList.remove('hidden');
+        errorSound.play();
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      mainScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+      usernameInput.value = '';
+      passwordInput.value = '';
+      saleMessage.textContent = '';
+      cashMessage.textContent = '';
+      animationDiv.textContent = '';
+    });
+
+    // Inicialização
+    updatePrice();
+  </script>
+</body>
+</html>
