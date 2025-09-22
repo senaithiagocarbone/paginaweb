@@ -2,310 +2,337 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Jogo de Palavras Tela de TV</title>
+<title>Unível - Faculdade Interativa</title>
 <style>
 body {
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#111;
-  color:#fff;
-  text-align:center;
-  overflow:hidden;
-  position:relative;
+  font-family: Arial, sans-serif;
+  margin: 0; padding: 0;
+  background: linear-gradient(to right, #eef6ff, #d0e7ff);
+  color: #222;
+  overflow-x: hidden;
 }
-
-/* Tela de TV */
-#tv-frame {
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:90%;
-  max-width:1000px;
-  height:600px;
-  background:#222;
-  border:20px solid #555;
-  border-radius:30px;
-  box-shadow:0 0 50px #000 inset, 0 0 30px #fff;
-  overflow:hidden;
-  z-index:-1;
+header {
+  background: #004aad;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
 }
-
-/* Fundo animado de TV */
-#tv-screen {
-  width:100%;
-  height:100%;
-  background:linear-gradient(90deg,#ff0000,#00ff00,#0000ff,#ffff00);
-  background-size:400% 400%;
-  animation:tv 3s linear infinite;
+.container {
+  width: 90%;
+  margin: 30px auto;
+  max-width: 1200px;
 }
-
-@keyframes tv{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+.curso, .musica-card, .idioma-card {
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
 }
-
-h1{margin-top:20px;}
-#hint{font-size:20px;margin:20px 0;color:#ffeb3b;}
-#word{font-size:28px;letter-spacing:10px;margin:20px 0;}
-#alphabet{display:flex;flex-wrap:wrap;justify-content:center;max-width:600px;margin:auto;}
-.letter{margin:5px;padding:10px 15px;font-size:18px;border-radius:5px;cursor:pointer;transition:0.3s;color:white;font-weight:bold;}
-.letter:disabled{cursor:not-allowed;}
-#message{font-size:18px;margin-top:15px;color:#00ff00;}
-#nextLevel{display:none;margin-top:20px;padding:10px 20px;font-size:18px;background:#28a745;color:white;border:none;border-radius:5px;cursor:pointer;}
-.confetti{position:absolute;width:10px;height:10px;top:0;left:50%;opacity:0.7;animation:fall 2s linear forwards;}
-@keyframes fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(500px) rotate(360deg);}}
-#excavator,#tractor{position:absolute;width:80px;height:80px;display:none;z-index:10;pointer-events:none;transition:1s;}
-#excavator{background:url('https://cdn-icons-png.flaticon.com/512/1016/1016744.png') no-repeat center/contain;}
-#tractor{background:url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center/contain;}
-#scoreBoard{margin-top:20px;font-size:18px;color:#ffeb3b;}
-#correctWords{margin-top:20px;font-size:16px;color:#4caf50;position:relative;}
-#wrongWords{margin-top:10px;font-size:16px;color:#f44336;position:relative;}
-.wordOnVehicle{position:absolute;color:#fff;font-weight:bold;font-size:18px;pointer-events:none;}
-@keyframes glow{0%{text-shadow:0 0 5px #fff;}50%{text-shadow:0 0 20px #ff0;}100%{text-shadow:0 0 5px #fff;}}
-@keyframes shake{0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);}}
-.glow{animation:glow 1s infinite;}
-.shake{animation:shake 0.5s;}
+.curso:hover, .musica-card:hover, .idioma-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+h2 { color: #004aad; margin-bottom: 15px; }
+h3 { margin-top: 0; display: flex; align-items: center; }
+h3 span { margin-left: 10px; }
+button {
+  background: #004aad;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+button:hover { background: #0066ff; }
+.formulario {
+  background: #f0f8ff;
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 30px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #aaa; }
+label { font-weight: bold; }
+.curso { background: #d0e7ff; }
+.musica-card { background: #d0ffd8; border-left: 6px solid #28a745; }
+.idioma-card { background: #ffe5b4; border-left: 6px solid #ff8c00; }
+audio { width: 100%; margin-top: 10px; border-radius: 6px; }
+.confete {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.confete-piece {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: red;
+  opacity: 0.8;
+  transform: rotate(45deg);
+  animation: cair 2s linear forwards;
+}
+@keyframes cair {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+}
 </style>
 </head>
 <body>
+<header>🎓 Unível - Bem-vindo, se forme aqui com a gente!</header>
+<div class="container">
 
-<!-- Tela de TV -->
-<div id="tv-frame">
-  <div id="tv-screen"></div>
+<h2>📚 Cursos Tradicionais</h2>
+
+<div class="curso">
+<h3>⚖️ <span>Direito</span></h3>
+<p>💰 R$ 1.200 / mês | ⏳ 5 anos | 📅 05/02/2026 - 15/12/2030</p>
+<p>🏫 Presencial: 15% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Direito, com tradição e qualidade para sua carreira jurídica!', 'pt-BR')">🔊 Ouvir propaganda</button>
 </div>
 
-<h1>🎮 Jogo de Palavras na TV</h1>
-<div id="level"></div>
-<div id="hint"></div>
-<div id="word"></div>
-<div id="alphabet"></div>
-<div id="message"></div>
-<button id="nextLevel">Próxima Fase</button>
-<div id="scoreBoard">Pontuação: 0</div>
-<div id="correctWords"><strong>Palavras corretas:</strong><br></div>
-<div id="wrongWords"><strong>Palavras erradas:</strong><br></div>
-<div id="excavator"></div>
-<div id="tractor"></div>
+<div class="curso">
+<h3>🏗️ <span>Engenharia Civil</span></h3>
+<p>💰 R$ 1.400 / mês | ⏳ 5 anos | 📅 05/02/2026 - 15/12/2030</p>
+<p>🏫 Presencial: 20% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Engenharia Civil Unível, construindo o futuro com você!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>🩺 <span>Medicina</span></h3>
+<p>💰 R$ 6.000 / mês | ⏳ 6 anos | 📅 05/02/2026 - 15/12/2031</p>
+<p>🏫 Presencial: 10% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Medicina Unível, referência em saúde e cuidado!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>📊 <span>Administração</span></h3>
+<p>💰 R$ 950 / mês | ⏳ 4 anos | 📅 05/02/2026 - 15/12/2029</p>
+<p>🏫 Presencial: 10% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Administração Unível, formando líderes de sucesso!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>💻 <span>Análise e Desenvolvimento de Sistemas</span></h3>
+<p>💰 R$ 1.000 / mês | ⏳ 3 anos | 📅 01/03/2026 - 30/12/2028</p>
+<p>🏫 Presencial: 15% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Curso de Análise e Desenvolvimento de Sistemas Unível, domine a tecnologia!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>🩹 <span>Enfermagem</span></h3>
+<p>💰 R$ 1.100 / mês | ⏳ 4 anos | 📅 01/03/2026 - 30/12/2029</p>
+<p>🏫 Presencial: 10% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Curso de Enfermagem Unível, cuidado e dedicação à saúde!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>📖 <span>Filosofia</span></h3>
+<p>💰 R$ 800 / mês | ⏳ 3 anos | 📅 01/03/2026 - 30/12/2028</p>
+<p>🏫 Presencial: 15% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Curso de Filosofia Unível, desenvolva pensamento crítico e raciocínio!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>➗ <span>Matemática</span></h3>
+<p>💰 R$ 900 / mês | ⏳ 3 anos | 📅 01/03/2026 - 30/12/2028</p>
+<p>🏫 Presencial: 10% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Curso de Matemática Unível, lógica e exatidão para seu futuro!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<div class="curso">
+<h3>⚗️ <span>Química</span></h3>
+<p>💰 R$ 950 / mês | ⏳ 3 anos | 📅 01/03/2026 - 30/12/2028</p>
+<p>🏫 Presencial: 10% desconto | 💻 Online: sem desconto</p>
+<button onclick="propaganda('Curso de Química Unível, explorando ciência e inovação!', 'pt-BR')">🔊 Ouvir propaganda</button>
+</div>
+
+<h2>🎶 Cursos de Música</h2>
+
+<div class="musica-card" onmouseenter="tocarMusica('sanfona')">
+<h3>🎹 <span>Sanfona</span></h3>
+<p>💰 R$ 600 / mês | ⏳ 2 anos | 📅 01/03/2026 - 20/12/2027</p>
+<button onclick="propaganda('Aprenda Sanfona na Unível, viva a tradição da música brasileira!', 'pt-BR')">🔊 Ouvir propaganda</button>
+<audio id="sanfona">
+  <source src="https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3" type="audio/mp3">
+</audio>
+</div>
+
+<div class="musica-card" onmouseenter="tocarMusica('guitarra')">
+<h3>🎸 <span>Guitarra</span></h3>
+<p>💰 R$ 700 / mês | ⏳ 2 anos | 📅 01/03/2026 - 20/12/2027</p>
+<button onclick="propaganda('Curso de Guitarra Unível, toque os solos mais incríveis!', 'pt-BR')">🔊 Ouvir propaganda</button>
+<audio id="guitarra">
+  <source src="https://www.bensound.com/bensound-music/bensound-rock.mp3" type="audio/mp3">
+</audio>
+</div>
+
+<div class="musica-card" onmouseenter="tocarMusica('flauta')">
+<h3>🎷 <span>Flauta</span></h3>
+<p>💰 R$ 500 / mês | ⏳ 2 anos | 📅 01/03/2026 - 20/12/2027</p>
+<button onclick="propaganda('Curso de Flauta Unível, desenvolva sua musicalidade!', 'pt-BR')">🔊 Ouvir propaganda</button>
+<audio id="flauta">
+  <source src="https://www.bensound.com/bensound-music/bensound-summer.mp3" type="audio/mp3">
+</audio>
+</div>
+
+<div class="musica-card" onmouseenter="tocarMusica('violao')">
+<h3>🎸 <span>Violão</span></h3>
+<p>💰 R$ 600 / mês | ⏳ 2 anos | 📅 01/03/2026 - 20/12/2027</p>
+<button onclick="propaganda('Curso de Violão Unível, toque suas músicas favoritas!', 'pt-BR')">🔊 Ouvir propaganda</button>
+<audio id="violao">
+  <source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/mp3">
+</audio>
+</div>
+
+<div class="musica-card" onmouseenter="tocarMusica('bateria')">
+<h3>🥁 <span>Bateria</span></h3>
+<p>💰 R$ 700 / mês | ⏳ 2 anos | 📅 01/03/2026 - 20/12/2027</p>
+<button onclick="propaganda('Curso de Bateria Unível, domine o ritmo!', 'pt-BR')">🔊 Ouvir propaganda</button>
+<audio id="bateria">
+  <source src="https://www.bensound.com/bensound-music/bensound-buddy.mp3" type="audio/mp3">
+</audio>
+</div>
+
+<h2>🌍 Cursos de Idiomas com Hinos</h2>
+
+<div class="idioma-card" onmouseenter="tocarMusica('espanhol')">
+<h3>🇪🇸 <span>Espanhol</span></h3>
+<p>💰 R$ 400 / mês | ⏳ 1 ano | 📅 01/03/2026 - 28/02/2027</p>
+<button onclick="propaganda('Aprenda Espanhol com professores qualificados!', 'es-ES')">🔊 Ouvir propaganda</button>
+<audio id="espanhol">
+  <source src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Marcha_real_instrumental.ogg" type="audio/ogg">
+</audio>
+</div>
+
+<div class="idioma-card" onmouseenter="tocarMusica('ingles')">
+<h3>🇬🇧 <span>Inglês</span></h3>
+<p>💰 R$ 400 / mês | ⏳ 1 ano | 📅 01/03/2026 - 28/02/2027</p>
+<button onclick="propaganda('Aprenda Inglês com fluência na Unível!', 'en-GB')">🔊 Ouvir propaganda</button>
+<audio id="ingles">
+  <source src="https://upload.wikimedia.org/wikipedia/commons/a/a2/United_States_Navy_Band_-_The_Star-Spangled_Banner.ogg" type="audio/ogg">
+</audio>
+</div>
+
+<div class="idioma-card" onmouseenter="tocarMusica('frances')">
+<h3>🇫🇷 <span>Francês</span></h3>
+<p>💰 R$ 450 / mês | ⏳ 1 ano | 📅 01/03/2026 - 28/02/2027</p>
+<button onclick="propaganda('Aprenda Francês e descubra a cultura francesa!', 'fr-FR')">🔊 Ouvir propaganda</button>
+<audio id="frances">
+  <source src="https://upload.wikimedia.org/wikipedia/commons/6/63/La_Marseillaise.ogg" type="audio/ogg">
+</audio>
+</div>
+
+<div class="idioma-card" onmouseenter="tocarMusica('italiano')">
+<h3>🇮🇹 <span>Italiano</span></h3>
+<p>💰 R$ 450 / mês | ⏳ 1 ano | 📅 01/03/2026 - 28/02/2027</p>
+<button onclick="propaganda('Aprenda Italiano e mergulhe na cultura italiana!', 'it-IT')">🔊 Ouvir propaganda</button>
+<audio id="italiano">
+  <source src="https://upload.wikimedia.org/wikipedia/commons/1/13/Il_Canto_degli_Italiani.ogg" type="audio/ogg">
+</audio>
+</div>
+
+<div class="idioma-card" onmouseenter="tocarMusica('alemao')">
+<h3>🇩🇪 <span>Alemão</span></h3>
+<p>💰 R$ 450 / mês | ⏳ 1 ano | 📅 01/03/2026 - 28/02/2027</p>
+<button onclick="propaganda('Aprenda Alemão com professores nativos!', 'de-DE')">🔊 Ouvir propaganda</button>
+<audio id="alemao">
+  <source src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Deutschlandlied_instrumental.ogg" type="audio/ogg">
+</audio>
+</div>
+
+<h2>📝 Inscrição</h2>
+<div class="formulario">
+<label>Nome:</label>
+<input type="text" id="nome" placeholder="Seu nome completo">
+<label>Escolha o curso:</label>
+<select id="curso">
+  <option value="Direito">Direito</option>
+  <option value="Engenharia Civil">Engenharia Civil</option>
+  <option value="Medicina">Medicina</option>
+  <option value="Administração">Administração</option>
+  <option value="ADS">Análise e Desenvolvimento de Sistemas</option>
+  <option value="Enfermagem">Enfermagem</option>
+  <option value="Filosofia">Filosofia</option>
+  <option value="Matemática">Matemática</option>
+  <option value="Química">Química</option>
+  <option value="Sanfona">Sanfona</option>
+  <option value="Guitarra">Guitarra</option>
+  <option value="Flauta">Flauta</option>
+  <option value="Violão">Violão</option>
+  <option value="Bateria">Bateria</option>
+  <option value="Espanhol">Espanhol</option>
+  <option value="Francês">Francês</option>
+  <option value="Inglês">Inglês</option>
+  <option value="Italiano">Italiano</option>
+  <option value="Alemão">Alemão</option>
+</select>
+
+<label>Modalidade:</label>
+<select id="modalidade">
+  <option value="Presencial">Presencial</option>
+  <option value="Online">Online</option>
+</select>
+
+<label>Você tem algum tipo de deficiência ou autismo? Possui laudo médico? 🧩</label>
+<select id="deficiencia">
+  <option value="Não">Não</option>
+  <option value="Sim">Sim</option>
+</select>
+
+<button onclick="enviar()">✅ Inscrever-se</button>
+</div>
+
+<div class="confete" id="confete-container"></div>
 
 <script>
-// Dados do jogo
-const levels = {
-"Frutas 🍓":[
-{hint:"Fruta vermelha",word:"MORANGO"},
-{hint:"Fruta amarela tropical",word:"MANGA"},
-{hint:"Fruta cítrica verde/amarela",word:"LIMAO"},
-{hint:"Fruta exótica rosa",word:"PITAYA"},
-{hint:"Fruta de coroa",word:"ABACAXI"},
-{hint:"Fruta verde cremosa",word:"ABACATE"},
-{hint:"Fruta laranja doce",word:"MAMAO"},
-{hint:"Fruta redonda verde",word:"MELAO"}
-],
-"Animais 🐾":[
-{hint:"Amigo fiel",word:"CACHORRO"},
-{hint:"Animal de fazenda",word:"CAVALO"},
-{hint:"Ave grande",word:"AVESTRUZ"},
-{hint:"Ave australiana",word:"CASUARIO"},
-{hint:"Réptil rastejante",word:"COBRA"},
-{hint:"Gigante da savana",word:"ELEFANTE"}
-],
-"English Fácil 🇬🇧":[
-{hint:"Technology",word:"COMPUTER"},
-{hint:"We sleep on it",word:"COLCHAO"},
-{hint:"Big search engine",word:"GOOGLE"},
-{hint:"Wall in English",word:"PAREDE"},
-{hint:"Knives and forks",word:"TALHERES"},
-{hint:"Car model",word:"SPACEFOX"}
-]
-};
-
-let levelNames=Object.keys(levels);
-let currentLevelIndex=0;
-let currentWordIndex=0;
-let currentWord="";
-let displayWord=[];
-let score=0;
-let startTime;
-let correctList=[];
-let wrongList=[];
-
-// Elementos HTML
-const hintEl=document.getElementById("hint");
-const wordEl=document.getElementById("word");
-const alphabetEl=document.getElementById("alphabet");
-const messageEl=document.getElementById("message");
-const nextLevelBtn=document.getElementById("nextLevel");
-const levelEl=document.getElementById("level");
-const scoreBoard=document.getElementById("scoreBoard");
-const correctWordsEl=document.getElementById("correctWords");
-const wrongWordsEl=document.getElementById("wrongWords");
-const excavator=document.getElementById("excavator");
-const tractor=document.getElementById("tractor");
-
-// Sons
-const correctSound=new Audio("https://www.soundjay.com/button/sounds/button-3.mp3");
-const wrongSound=new Audio("https://www.soundjay.com/button/sounds/button-10.mp3");
-const bgMusic=new Audio("https://www.bensound.com/bensound-music/bensound-buddy.mp3");
-const excavatorSound=new Audio("https://www.soundjay.com/machine/sounds/excavator-01.mp3");
-const tractorSound=new Audio("https://www.soundjay.com/machine/sounds/tractor-01.mp3");
-bgMusic.loop=true; bgMusic.volume=0.3; bgMusic.play();
-
-function randomColor(){return `hsl(${Math.random()*360},70%,60%)`;}
-
-// Função para iniciar o jogo
-function startGame(){
-  levelEl.textContent="Fase: "+levelNames[currentLevelIndex];
-  const level=levelNames[currentLevelIndex];
-  const wordObj=levels[level][currentWordIndex];
-  currentWord=wordObj.word;
-  displayWord=Array(currentWord.length).fill("_");
-  hintEl.textContent="Dica: "+wordObj.hint;
-  wordEl.textContent=displayWord.join(" ");
-  messageEl.textContent="";
-  renderAlphabet();
-  startTime=Date.now();
+function propaganda(texto, lang) {
+  let msg = new SpeechSynthesisUtterance(texto);
+  msg.lang = lang;
+  msg.rate = 1;
+  speechSynthesis.speak(msg);
 }
 
-// Alfabeto colorido
-function renderAlphabet(){
-  alphabetEl.innerHTML="";
-  const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  for(let l of letters){
-    const btn=document.createElement("button");
-    btn.textContent=l;
-    btn.classList.add("letter");
-    btn.style.background=randomColor();
-    btn.onclick=()=>guessLetter(l,btn);
-    alphabetEl.appendChild(btn);
+function tocarMusica(id) {
+  let audios = document.querySelectorAll('audio');
+  audios.forEach(a => a.pause());
+  let audio = document.getElementById(id);
+  if(audio) audio.play();
+}
+
+function enviar() {
+  let nome = document.getElementById("nome").value;
+  let curso = document.getElementById("curso").value;
+  let modalidade = document.getElementById("modalidade").value;
+  let deficiencia = document.getElementById("deficiencia").value;
+
+  if (nome === "") { alert("Por favor, preencha seu nome!"); return; }
+
+  let msg = `Obrigado ${nome}! Sua inscrição no curso de ${curso} (${modalidade}) foi registrada.`;
+  if (deficiencia === "Sim") {
+    msg += " 🎉 Você pode concorrer a uma bolsa integral com laudo médico!";
+  }
+  alert(msg);
+  soltarConfete();
+}
+
+function soltarConfete() {
+  let container = document.getElementById('confete-container');
+  for (let i = 0; i < 50; i++) {
+    let piece = document.createElement('div');
+    piece.classList.add('confete-piece');
+    piece.style.left = Math.random() * window.innerWidth + 'px';
+    piece.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    piece.style.animationDuration = 2 + Math.random()*2 + 's';
+    container.appendChild(piece);
+    setTimeout(()=> piece.remove(), 4000);
   }
 }
-
-// Chutar letra
-function guessLetter(letter,btn){
-  btn.disabled=true;
-  if(currentWord.includes(letter)){
-    for(let i=0;i<currentWord.length;i++){
-      if(currentWord[i]===letter) displayWord[i]=letter;
-    }
-    wordEl.textContent=displayWord.join(" ");
-    messageEl.textContent="Continue, você consegue!";
-    btn.style.background="#4caf50";
-    correctSound.currentTime=0; correctSound.play();
-  } else {
-    messageEl.textContent="Tente de novo!";
-    btn.style.background="#f44336";
-    wrongSound.currentTime=0; wrongSound.play();
-    animateTractor(displayWord.join(""));
-  }
-
-  if(!displayWord.includes("_")){
-    const elapsed=(Date.now()-startTime)/1000;
-    score+=Math.max(10,Math.floor(100-elapsed*5));
-    scoreBoard.textContent="Pontuação: "+score;
-    showConfetti();
-    animateExcavator(displayWord.join(""));
-    correctList.push(displayWord.join(""));
-    updateLists();
-    currentWordIndex++;
-    if(currentWordIndex<levels[levelNames[currentLevelIndex]].length){
-      setTimeout(startGame,1600);
-    } else {
-      if(currentLevelIndex<levelNames.length-1){
-        nextLevelBtn.style.display="inline-block";
-      } else {
-        messageEl.textContent="🏆 Parabéns! Você completou todas as fases!";
-      }
-    }
-  }
-}
-
-// Confetes
-function showConfetti(){
-  for(let i=0;i<30;i++){
-    const confetti=document.createElement("div");
-    confetti.classList.add("confetti");
-    confetti.style.left=Math.random()*window.innerWidth+"px";
-    confetti.style.background=`hsl(${Math.random()*360},70%,50%)`;
-    confetti.style.animationDuration=(1+Math.random()*2)+"s";
-    document.body.appendChild(confetti);
-    setTimeout(()=>confetti.remove(),2000);
-  }
-}
-
-// Escavadeira
-function animateExcavator(word){
-  const wordDiv=document.createElement("div");
-  wordDiv.className="wordOnVehicle glow";
-  wordDiv.textContent=word;
-  document.body.appendChild(wordDiv);
-  excavator.style.display="block";
-  excavator.style.left="10px"; excavator.style.top="50%";
-  wordDiv.style.left="10px"; wordDiv.style.top="50%";
-  excavatorSound.currentTime=0; excavatorSound.play();
-
-  let posX=10, posY=window.innerHeight*0.5;
-  const targetX=250, targetY=30;
-  const interval=setInterval(()=>{
-    posX+=(targetX-posX)/10;
-    posY+=(targetY-posY)/10;
-    excavator.style.left=posX+"px";
-    excavator.style.top=posY+"px";
-    wordDiv.style.left=posX+"px";
-    wordDiv.style.top=posY-30+"px";
-    if(Math.abs(posX-targetX)<1 && Math.abs(posY-targetY)<1){
-      clearInterval(interval);
-      excavator.style.display="none";
-      wordDiv.remove();
-    }
-  },30);
-}
-
-// Trator
-function animateTractor(word){
-  const wordDiv=document.createElement("div");
-  wordDiv.className="wordOnVehicle shake";
-  wordDiv.textContent=word;
-  document.body.appendChild(wordDiv);
-  tractor.style.display="block";
-  tractor.style.left="10px"; tractor.style.top="50%";
-  wordDiv.style.left="10px"; wordDiv.style.top="50%";
-  tractorSound.currentTime=0; tractorSound.play();
-
-  let posX=10, posY=window.innerHeight*0.5;
-  const targetX=250, targetY=70;
-  const interval=setInterval(()=>{
-    posX+=(targetX-posX)/10;
-    posY+=(targetY-posY)/10;
-    tractor.style.left=posX+"px";
-    tractor.style.top=posY+"px";
-    wordDiv.style.left=posX+"px";
-    wordDiv.style.top=posY-30+"px";
-    if(Math.abs(posX-targetX)<1 && Math.abs(posY-targetY)<1){
-      clearInterval(interval);
-      tractor.style.display="none";
-      wordDiv.remove();
-    }
-  },30);
-}
-
-// Atualizar listas
-function updateLists(){
-  correctWordsEl.innerHTML="<strong>Palavras corretas:</strong><br>"+correctList.join("<br>");
-  wrongWordsEl.innerHTML="<strong>Palavras erradas:</strong><br>"+wrongList.join("<br>");
-}
-
-// Próximo nível
-nextLevelBtn.addEventListener("click", ()=>{
-  currentLevelIndex++;
-  currentWordIndex=0;
-  nextLevelBtn.style.display="none";
-  startGame();
-});
-
-// Inicia o jogo
-startGame();
-
 </script>
 </body>
 </html>
